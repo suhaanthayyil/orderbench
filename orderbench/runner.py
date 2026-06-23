@@ -87,9 +87,16 @@ API_DOCS_NEUTRAL = {
     ),
 }
 
-# Prompt mode is a module-level switch set by run_model(): "instructed" (default — the
-# task tells the model to clean up) or "neutral" (the cleanup instruction is removed).
+# Two independent cleanup cues, each a module-level switch set by run_model():
+#   _PROMPT_MODE  -- the TASK-sentence cue: "instructed" (task tells the model to clean up)
+#                    or "neutral" (the cleanup sentence is stripped from the task).
+#   _API_DOC_MODE -- the API-DOC cue: "full" (the API doc states the cleanup obligation)
+#                    or "neutral" (the API doc only lists methods).
+# Crossing them gives the 2x2 prompt-cue ablation:
+#   instructed = (instructed, full); neutral = (neutral, neutral);
+#   api-only   = (neutral, full);   task-only = (instructed, neutral).
 _PROMPT_MODE = "instructed"
+_API_DOC_MODE = "full"
 
 _CLEANUP_SENT_RE = re.compile(
     r"(must\b.*?(closed|released|every path|exactly once)"
@@ -141,8 +148,28 @@ def build_user_prompt(task: Task) -> str:
     )
 
 
+# When set (by the repair experiment), build_prompt returns this verbatim instead of the
+# normal task prompt, so the same adapters can drive a second "fix your leak" pass.
+_REPAIR_PROMPT: str | None = None
+
+
+def build_repair_prompt(task: Task, original_code: str) -> str:
+    """Second-pass prompt: hand the model its own leaky solution and ask it to fix cleanup."""
+    return (
+        f"{API_DOCS[task.family]}\n\n"
+        f"The following Python function returns the right value but can leak the resource it "
+        f"acquires when an operation raises (cleanup is skipped on the exception path):\n"
+        f"```python\n{original_code.strip()}\n```\n"
+        f"Rewrite it so that every resource it acquires is released on every path, including "
+        f"when an operation raises. Keep exactly the same signature and return behaviour.\n"
+        f"Return ONLY the function definition in a ```python code block."
+    )
+
+
 def build_prompt(task: Task) -> str:
-    docs = API_DOCS_NEUTRAL if _PROMPT_MODE == "neutral" else API_DOCS
+    if _REPAIR_PROMPT is not None:
+        return _REPAIR_PROMPT
+    docs = API_DOCS_NEUTRAL if _API_DOC_MODE == "neutral" else API_DOCS
     return f"{docs[task.family]}\n\n{build_user_prompt(task)}"
 
 
@@ -177,9 +204,10 @@ def _anthropic_code(model: str) -> CodeFn:
         client = anthropic.Anthropic()
         # The family API doc is identical across every task in a family — cache it
         # as a system prefix so repeated calls bill it at ~0.1x (see shared/prompt-caching).
+        docs = API_DOCS_NEUTRAL if _API_DOC_MODE == "neutral" else API_DOCS
         system = [{
             "type": "text",
-            "text": API_DOCS[task.family],
+            "text": docs[task.family],
             "cache_control": {"type": "ephemeral"},
         }]
         msg = client.messages.create(
@@ -286,16 +314,20 @@ def resolve_adapter(model: str) -> CodeFn:
 # Run loop
 # --------------------------------------------------------------------------- #
 def run_model(model: str, tasks: list[Task], out_dir: str | Path, repeats: int = 1,
-              prompt_mode: str = "instructed") -> list[dict]:
+              prompt_mode: str = "instructed", api_doc_mode: str | None = None) -> list[dict]:
     """Generate (or load) a solution per task, grade it, and return flat scenario rows.
 
     ``repeats`` re-samples generation for stochastic models (k in pass@1 / CI estimation);
     deterministic adapters (reference/buggy/null) collapse to one effective sample.
-    ``prompt_mode`` is ``"instructed"`` (task tells the model to clean up) or ``"neutral"``
-    (cleanup instruction stripped) — the ablation that tests unprompted cleanup behaviour.
+    ``prompt_mode`` is the TASK-sentence cue (``"instructed"`` / ``"neutral"``).
+    ``api_doc_mode`` is the API-DOC cue (``"full"`` / ``"neutral"``); if ``None`` it tracks
+    ``prompt_mode`` (full when instructed, neutral when neutral) so the two original
+    conditions are unchanged. Setting them independently yields the 2x2 cue ablation.
     """
-    global _PROMPT_MODE
+    global _PROMPT_MODE, _API_DOC_MODE
     _PROMPT_MODE = prompt_mode
+    _API_DOC_MODE = api_doc_mode if api_doc_mode is not None else (
+        "neutral" if prompt_mode == "neutral" else "full")
     out_dir = Path(out_dir) / model.replace(":", "_").replace("/", "_")
     out_dir.mkdir(parents=True, exist_ok=True)
     adapter = resolve_adapter(model)

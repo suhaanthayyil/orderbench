@@ -1,0 +1,44 @@
+{
+  "openai:gpt-4o-mini": {
+    "candidates": 14,
+    "fixed": 14,
+    "regressed": 0,
+    "fix_rate": 1.0
+  },
+  "openai:gpt-4.1": {
+    "candidates": 9,
+    "fixed": 9,
+    "regressed": 0,
+    "fix_rate": 1.0
+  },
+  "openai:gpt-4.1-mini": {
+    "candidates": 13,
+    "fixed": 13,
+    "regressed": 0,
+    "fix_rate": 1.0
+  },
+  "openai:gpt-4.1-nano": {
+    "candidates": 11,
+    "fixed": 11,
+    "regressed": 0,
+    "fix_rate": 1.0
+  },
+  "openai:gpt-5.4-mini": {
+    "candidates": 5,
+    "fixed": 5,
+    "regressed": 0,
+    "fix_rate": 1.0
+  },
+  "openai:gpt-5.4-nano": {
+    "candidates": 4,
+    "fixed": 4,
+    "regressed": 0,
+    "fix_rate": 1.0
+  },
+  "openai:gpt-5": {
+    "candidates": 3,
+    "fixed": 3,
+    "regressed": 0,
+    "fix_rate": 1.0
+  }
+}

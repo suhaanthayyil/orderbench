@@ -1,0 +1,91 @@
+{
+  "models": {
+    "claude-code:haiku": {
+      "model": "claude-code:haiku",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 1.0,
+      "error_correct": 1.0,
+      "cleanup_gap": 0.0,
+      "silent_misuse_rate": 0.0,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 0
+      },
+      "ci": {
+        "happy_correct": [
+          1.0,
+          1.0
+        ],
+        "error_correct": [
+          1.0,
+          1.0
+        ],
+        "cleanup_gap": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "claude-code:sonnet": {
+      "model": "claude-code:sonnet",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 1.0,
+      "error_correct": 1.0,
+      "cleanup_gap": 0.0,
+      "silent_misuse_rate": 0.0,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 0
+      },
+      "ci": {
+        "happy_correct": [
+          1.0,
+          1.0
+        ],
+        "error_correct": [
+          1.0,
+          1.0
+        ],
+        "cleanup_gap": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "claude-code:opus": {
+      "model": "claude-code:opus",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 1.0,
+      "error_correct": 1.0,
+      "cleanup_gap": 0.0,
+      "silent_misuse_rate": 0.0,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 0
+      },
+      "ci": {
+        "happy_correct": [
+          1.0,
+          1.0
+        ],
+        "error_correct": [
+          1.0,
+          1.0
+        ],
+        "cleanup_gap": [
+          0.0,
+          0.0
+        ]
+      }
+    }
+  }
+}

@@ -30,21 +30,26 @@ def main() -> int:
     ap.add_argument("--tasks", default=str(ROOT / "tasks"))
     ap.add_argument("--tag", default="demo")
     ap.add_argument("--prompt-mode", choices=["instructed", "neutral"], default="instructed",
-                    help="instructed: task tells the model to clean up; "
-                         "neutral: cleanup instruction stripped (the ablation)")
+                    help="TASK-sentence cue: instructed (task tells the model to clean up) "
+                         "or neutral (task cleanup sentence stripped)")
+    ap.add_argument("--api-doc-mode", choices=["full", "neutral", "auto"], default="auto",
+                    help="API-DOC cue: full (doc states cleanup obligation), neutral (doc "
+                         "only lists methods), or auto (tracks --prompt-mode). Crossing the two "
+                         "cues gives the 2x2 ablation: neutral / api-only / task-only / instructed")
     args = ap.parse_args()
+    api_doc_mode = None if args.api_doc_mode == "auto" else args.api_doc_mode
 
     tasks = load_suite(args.tasks)
     print(f"loaded {len(tasks)} tasks")
     out_root = ROOT / "results" / args.tag
     sols_dir = out_root / "solutions"
 
-    print(f"prompt mode: {args.prompt_mode}")
+    print(f"prompt mode: {args.prompt_mode}  api-doc mode: {args.api_doc_mode}")
     rows_by_model = {}
     all_rows = []
     for model in args.models:
         rows = run_model(model, tasks, sols_dir, repeats=args.repeats,
-                         prompt_mode=args.prompt_mode)
+                         prompt_mode=args.prompt_mode, api_doc_mode=api_doc_mode)
         rows_by_model[model] = rows
         all_rows.extend(rows)
         print(f"  {model}: {len(rows)} scenario rows")

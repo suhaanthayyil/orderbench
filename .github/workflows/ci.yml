@@ -1,0 +1,30 @@
+name: orderbench-ci
+
+# Key-free CI: the construct-validity gate, the smoke suite, the demo eval, the figure/table
+# regeneration, and the 8-primitive stdlib validity bridge all run with no API keys.
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -r requirements.txt
+      - name: Construct-validity gate (every reference clean, every buggy leaks)
+        run: python scripts/validate_all.py
+      - name: Smoke tests
+        run: python -m pytest -q || python tests/test_smoke.py
+      - name: Demo eval (key-free baselines)
+        run: python scripts/run_eval.py --models reference buggy null --tag demo
+      - name: Regenerate figures + tables
+        run: python scripts/make_figures.py results/demo/results.json
+      - name: Validity bridge (8 real stdlib primitives)
+        run: python scripts/validity_bridge.py

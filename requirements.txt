@@ -1,6 +1,9 @@
-numpy>=1.24
-matplotlib>=3.6
-pytest>=7
-# Optional, only needed to run real LLM adapters:
-# anthropic>=0.40
-# openai>=1.40
+# Tested on Python 3.12.4. Pinned for reproducibility; the lower bounds in comments also work.
+numpy==1.26.4        # >=1.24
+matplotlib==3.9.2    # >=3.6
+pytest==9.1.1        # >=7
+# Optional, only needed to RE-COLLECT real LLM outputs (not needed to reproduce the paper
+# tables, which run from committed results + the key-free baselines + the stdlib bridge):
+# openai>=1.40       # for openai:<model> adapter (needs OPENAI_API_KEY)
+# anthropic>=0.40    # for anthropic:<model> adapter (needs ANTHROPIC_API_KEY)
+# the claude-code:<alias> and ollama:<model> adapters need the `claude` CLI / `ollama` on PATH

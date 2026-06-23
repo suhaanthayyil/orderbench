@@ -71,11 +71,15 @@ def test_validity_bridge_passes():
     vb = ROOT / "scripts" / "validity_bridge.py"
     spec = importlib.util.spec_from_file_location("validity_bridge", vb)
     mod = importlib.util.module_from_spec(spec)
+    sys.modules["validity_bridge"] = mod  # dataclass introspection needs the module registered
     spec.loader.exec_module(mod)
-    assert mod.run_sqlite(mod.sqlite_buggy) is True       # real connection leaks
-    assert mod.run_sqlite(mod.sqlite_reference) is False  # try/finally closes it
-    assert mod.run_lock(mod.lock_buggy) is True           # real lock stays held
-    assert mod.run_lock(mod.lock_reference) is False      # finally releases it
+    # Every real stdlib primitive: the buggy (no-finally) path leaks a genuine resource on
+    # error, while still producing the reference's happy output (output-only cannot tell).
+    assert len(mod.PRIMS) >= 6
+    for p in mod.PRIMS:
+        assert mod._run_error(p) is True, f"{p.name} buggy should leak on error"
+        assert mod._run_happy(p) is not None, f"{p.name} happy should produce output"
+    assert mod.main() == 0  # BRIDGE PASS across all primitives
 
 
 if __name__ == "__main__":

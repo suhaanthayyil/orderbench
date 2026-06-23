@@ -32,3 +32,6 @@ paper/
 
 # run logs
 results/*_run.log
+
+# run logs
+results/*.log

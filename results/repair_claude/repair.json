@@ -1,0 +1,20 @@
+{
+  "claude-code:haiku": {
+    "candidates": 25,
+    "fixed": 25,
+    "regressed": 0,
+    "fix_rate": 1.0
+  },
+  "claude-code:sonnet": {
+    "candidates": 16,
+    "fixed": 16,
+    "regressed": 0,
+    "fix_rate": 1.0
+  },
+  "claude-code:opus": {
+    "candidates": 2,
+    "fixed": 2,
+    "regressed": 0,
+    "fix_rate": 1.0
+  }
+}

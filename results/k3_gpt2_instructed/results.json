@@ -1,0 +1,149 @@
+{
+  "models": {
+    "openai:gpt-5": {
+      "model": "openai:gpt-5",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 0.9933,
+      "error_correct": 1.0,
+      "cleanup_gap": -0.0067,
+      "silent_misuse_rate": 0.0,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 0
+      },
+      "ci": {
+        "happy_correct": [
+          0.9792,
+          1.0
+        ],
+        "error_correct": [
+          1.0,
+          1.0
+        ],
+        "cleanup_gap": [
+          -0.0208,
+          0.0
+        ]
+      }
+    },
+    "openai:gpt-5-mini": {
+      "model": "openai:gpt-5-mini",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 0.9933,
+      "error_correct": 1.0,
+      "cleanup_gap": -0.0067,
+      "silent_misuse_rate": 0.0,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 0
+      },
+      "ci": {
+        "happy_correct": [
+          0.9792,
+          1.0
+        ],
+        "error_correct": [
+          1.0,
+          1.0
+        ],
+        "cleanup_gap": [
+          -0.0208,
+          0.0
+        ]
+      }
+    },
+    "openai:gpt-4.1": {
+      "model": "openai:gpt-4.1",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 0.9667,
+      "error_correct": 1.0,
+      "cleanup_gap": -0.0333,
+      "silent_misuse_rate": 0.0068,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 2
+      },
+      "ci": {
+        "happy_correct": [
+          0.9167,
+          1.0
+        ],
+        "error_correct": [
+          1.0,
+          1.0
+        ],
+        "cleanup_gap": [
+          -0.0833,
+          0.0
+        ]
+      }
+    },
+    "openai:gpt-4.1-mini": {
+      "model": "openai:gpt-4.1-mini",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 1.0,
+      "error_correct": 1.0,
+      "cleanup_gap": 0.0,
+      "silent_misuse_rate": 0.0,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 0
+      },
+      "ci": {
+        "happy_correct": [
+          1.0,
+          1.0
+        ],
+        "error_correct": [
+          1.0,
+          1.0
+        ],
+        "cleanup_gap": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "openai:gpt-4.1-nano": {
+      "model": "openai:gpt-4.1-nano",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 0.96,
+      "error_correct": 0.9444,
+      "cleanup_gap": 0.0156,
+      "silent_misuse_rate": 0.034,
+      "per_class": {
+        "order": 1,
+        "guard": 1,
+        "double": 8,
+        "unclosed": 0
+      },
+      "ci": {
+        "happy_correct": [
+          0.9095,
+          0.9931
+        ],
+        "error_correct": [
+          0.8819,
+          0.9861
+        ],
+        "cleanup_gap": [
+          -0.0556,
+          0.0903
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "models": {
+    "ollama:gemma4:12b": {
+      "model": "ollama:gemma4:12b",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 0.6533,
+      "error_correct": 0.6528,
+      "cleanup_gap": 0.0006,
+      "silent_misuse_rate": 0.0,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 0
+      },
+      "ci": {
+        "happy_correct": [
+          0.5417,
+          0.7569
+        ],
+        "error_correct": [
+          0.5484,
+          0.7571
+        ],
+        "cleanup_gap": [
+          0.0,
+          0.0
+        ]
+      }
+    }
+  }
+}
