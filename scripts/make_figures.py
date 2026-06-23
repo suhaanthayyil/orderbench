@@ -1,4 +1,4 @@
-"""Regenerate the paper's figures and LaTeX tables from a results bundle.
+"""Regenerate result figures and LaTeX tables (into out/) from a results bundle.
 
 Usage: python scripts/make_figures.py [results/<tag>/results.json]
 """
@@ -18,10 +18,10 @@ from orderbench.report import write_tables  # noqa: E402
 
 def main(results_path: str) -> int:
     bundle = json.loads(Path(results_path).read_text())
-    figs = all_figures(bundle, ROOT / "paper" / "figures")
-    write_tables(bundle, ROOT / "paper" / "tables")
+    figs = all_figures(bundle, ROOT / "out" / "figures")
+    write_tables(bundle, ROOT / "out" / "tables")
     print("figures:", figs)
-    print("tables:", str(ROOT / "paper" / "tables"))
+    print("tables:", str(ROOT / "out" / "tables"))
     return 0
 
 

@@ -17,18 +17,15 @@ venv/
 # OrderBench generated artifacts
 results/_pytest/
 results/**/solutions/
-# Keep the committed demo results + paper figures (they are the reproducible artifact):
+# Keep the committed demo results (they are the reproducible artifact):
 !results/demo/results.json
 !results/demo/rows.json
 
-# LaTeX build products
-paper/*.aux
-paper/*.log
-paper/*.out
-paper/*.pdf
-paper/*.bbl
-paper/*.blg
-paper/*.synctex.gz
+# Generated figures + LaTeX tables (regenerate with `make figures`)
+out/
+
+# Paper manuscript is kept local-only, never in the public repo
+paper/
 
 # OS
 .DS_Store

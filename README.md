@@ -64,7 +64,7 @@ pip install -r requirements.txt
 
 make validate     # construct-validity gate: every reference is clean, every buggy leaks
 make demo         # run reference / buggy / null baselines  ->  results/demo/
-make figures      # regenerate paper figures + LaTeX tables
+make figures      # regenerate result figures + LaTeX tables -> out/
 make test         # pytest smoke suite
 ```
 
@@ -120,8 +120,8 @@ orderbench/
   tasks/                 # the benchmark suite (one dir per task; see tasks/_schema.md)
   scripts/               # validate_all, run_eval, make_figures, bootstrap_seed_tasks
   tests/                 # pytest smoke suite
-  paper/                 # IEEE short-paper sources (main.tex, references.bib, tables/)
   results/demo/          # committed reproducible demo results
+  out/                   # generated figures + LaTeX tables (created by `make figures`)
 ```
 
 ## Adding tasks
@@ -140,7 +140,7 @@ task and is the CI gate.
   the model has zero relevant prior.
 - **Construct validity.** Violations are meaningful only if the mocks are realistic. A
   validity bridge replicates representative misuse classes against the real Python stdlib
-  (`sqlite3`, `threading.Lock`) — see `paper/`.
+  (`sqlite3`, `threading.Lock`) — run `make bridge`.
 - **Modest N.** We report bootstrap CIs over tasks and lead with the happy-vs-error *gap*,
   which is robust even when absolute violation rates are low on strong models.
 

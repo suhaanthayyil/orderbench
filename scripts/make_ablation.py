@@ -1,9 +1,9 @@
-"""Build the ablation figure + tables for the paper (cross-vendor, with CIs + per-family).
+"""Build the ablation figure + tables (cross-vendor, with CIs + per-family).
 
 Reads results/{panel,panel_neutral,gpt_instructed,gpt_neutral}; writes:
-  paper/figures/ablation_gap.png
-  paper/tables/ablation.tex     (per-model instructed vs neutral gap, 95% CI, silent, leaks)
-  paper/tables/perfamily.tex    (per-model neutral gap by resource family db/fs/lock)
+  out/figures/ablation_gap.png
+  out/tables/ablation.tex     (per-model instructed vs neutral gap, 95% CI, silent, leaks)
+  out/tables/perfamily.tex    (per-model neutral gap by resource family db/fs/lock)
 """
 
 from __future__ import annotations
@@ -52,7 +52,9 @@ def main() -> int:
     ins = _merge("results/panel/results.json", "results/gpt_instructed/results.json", "results/gpt2_instructed/results.json")
     neu = _merge("results/panel_neutral/results.json", "results/gpt_neutral/results.json", "results/gpt2_neutral/results.json")
     models = [m for m in MODELS if m in neu["models"]]
-    ablation_figure(ins, neu, ROOT / "paper/figures/ablation_gap.png", models=models)
+    (ROOT / "out/figures").mkdir(parents=True, exist_ok=True)
+    (ROOT / "out/tables").mkdir(parents=True, exist_ok=True)
+    ablation_figure(ins, neu, ROOT / "out/figures/ablation_gap.png", models=models)
 
     im, nm = ins["models"], neu["models"]
     pc = lambda x: f"{100 * x:.0f}"  # noqa: E731
@@ -77,7 +79,7 @@ def main() -> int:
             f"{pc(n['silent_misuse_rate'])} & {leaks} \\\\"
         )
     lines += [r"\bottomrule", r"\end{tabular}"]
-    (ROOT / "paper/tables/ablation.tex").write_text("\n".join(lines))
+    (ROOT / "out/tables/ablation.tex").write_text("\n".join(lines))
 
     # ---- per-family neutral cleanup gap ----
     rows = _rows("results/panel_neutral/rows.json", "results/gpt_neutral/rows.json", "results/gpt2_neutral/rows.json")
@@ -104,7 +106,7 @@ def main() -> int:
         flines.append(f"{LABEL[m]} & {gap(m,'db'):.0f} & "
                       f"\\textbf{{{gap(m,'fs'):.0f}}} & {gap(m,'lock'):.0f} \\\\")
     flines += [r"\bottomrule", r"\end{tabular}"]
-    (ROOT / "paper/tables/perfamily.tex").write_text("\n".join(flines))
+    (ROOT / "out/tables/perfamily.tex").write_text("\n".join(flines))
 
     print("wrote ablation.tex (with CIs) + perfamily.tex + ablation_gap.png")
     print("\nper-family neutral gap (pp):  model            db    fs   lock")

@@ -5,7 +5,7 @@ help:
 	@echo "  make install   - install runtime + dev deps"
 	@echo "  make validate  - construct-validity gate (reference clean / buggy leaks)"
 	@echo "  make demo      - run reference/buggy/null eval -> results/demo/"
-	@echo "  make figures   - regenerate paper figures + LaTeX tables from demo results"
+	@echo "  make figures   - regenerate result figures + LaTeX tables (-> out/) from demo results"
 	@echo "  make test      - run pytest smoke suite"
 	@echo "  make all       - validate + demo + figures + test"
 
@@ -19,7 +19,7 @@ demo:
 	python3 scripts/run_eval.py --models reference buggy null --tag demo
 
 figures:
-	python3 scripts/make_figures.py results/panel/results.json
+	python3 scripts/make_figures.py results/demo/results.json
 
 panel:
 	python3 scripts/run_eval.py --models reference buggy null \
