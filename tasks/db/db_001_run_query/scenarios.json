@@ -1,0 +1,24 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "SELECT 1"
+      ],
+      "expected": "ok:SELECT 1"
+    },
+    {
+      "name": "fail_in_execute",
+      "type": "error",
+      "args": [
+        "SELECT 1"
+      ],
+      "inject": {
+        "op": "execute",
+        "call_index": 1
+      },
+      "expect": "propagate"
+    }
+  ]
+}

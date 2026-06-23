@@ -1,0 +1,10 @@
+{
+  "id": "fs_010_read_file",
+  "family": "fs",
+  "title": "Read a file and return its contents, always closing the handle",
+  "entrypoint": "read_file",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

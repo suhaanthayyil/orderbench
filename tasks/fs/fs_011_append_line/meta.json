@@ -1,0 +1,10 @@
+{
+  "id": "fs_011_append_line",
+  "family": "fs",
+  "title": "Append a line to a file's contents and always close the handle",
+  "entrypoint": "append_line",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

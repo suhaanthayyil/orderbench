@@ -1,0 +1,26 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "users",
+        "alice"
+      ],
+      "expected": "ok:INSERT INTO users VALUES (alice)"
+    },
+    {
+      "name": "fail_in_insert",
+      "type": "error",
+      "args": [
+        "users",
+        "alice"
+      ],
+      "inject": {
+        "op": "execute",
+        "call_index": 1
+      },
+      "expect": "propagate"
+    }
+  ]
+}

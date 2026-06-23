@@ -1,0 +1,10 @@
+{
+  "id": "lock_026_running_total",
+  "family": "lock",
+  "title": "Accumulate a running total under the lock; release exactly once",
+  "entrypoint": "running_total",
+  "misuse_classes": [
+    "guard"
+  ],
+  "difficulty": "easy"
+}

@@ -1,0 +1,44 @@
+{
+  "scenarios": [
+    {
+      "name": "happy_raises",
+      "type": "happy",
+      "args": [
+        2,
+        9
+      ],
+      "expected": 9,
+      "build_kwargs": {
+        "value": 2
+      }
+    },
+    {
+      "name": "happy_no_change",
+      "type": "happy",
+      "args": [
+        9,
+        2
+      ],
+      "expected": 9,
+      "build_kwargs": {
+        "value": 9
+      }
+    },
+    {
+      "name": "fail_in_modify",
+      "type": "error",
+      "args": [
+        2,
+        9
+      ],
+      "inject": {
+        "op": "modify",
+        "call_index": 1
+      },
+      "expect": "propagate",
+      "build_kwargs": {
+        "value": 2
+      }
+    }
+  ]
+}

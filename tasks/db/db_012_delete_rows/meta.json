@@ -1,0 +1,10 @@
+{
+  "id": "db_012_delete_rows",
+  "family": "db",
+  "title": "Delete rows matching a condition and always close the connection",
+  "entrypoint": "delete_rows",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

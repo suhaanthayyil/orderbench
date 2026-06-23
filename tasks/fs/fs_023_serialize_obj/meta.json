@@ -1,0 +1,10 @@
+{
+  "id": "fs_023_serialize_obj",
+  "family": "fs",
+  "title": "Serialize two fields to a file and always close the handle",
+  "entrypoint": "serialize_obj",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

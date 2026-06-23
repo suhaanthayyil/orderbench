@@ -1,0 +1,28 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "settings",
+        "theme",
+        "dark"
+      ],
+      "expected": "ok:UPSERT INTO settings KEY theme VALUE dark"
+    },
+    {
+      "name": "fail_in_upsert",
+      "type": "error",
+      "args": [
+        "settings",
+        "theme",
+        "dark"
+      ],
+      "inject": {
+        "op": "execute",
+        "call_index": 1
+      },
+      "expect": "propagate"
+    }
+  ]
+}

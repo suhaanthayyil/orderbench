@@ -1,0 +1,10 @@
+{
+  "id": "db_011_insert_row",
+  "family": "db",
+  "title": "Insert a single row inside a transaction and always close the connection",
+  "entrypoint": "insert_row",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

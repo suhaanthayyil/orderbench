@@ -1,0 +1,10 @@
+{
+  "id": "db_010_run_query2",
+  "family": "db",
+  "title": "Run two queries in one transaction and always close the connection",
+  "entrypoint": "run_query2",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "fs_015_checksum_like",
+  "family": "fs",
+  "title": "Compute a checksum-like value over a file, closing the handle exactly once",
+  "entrypoint": "checksum_like",
+  "misuse_classes": [
+    "double"
+  ],
+  "difficulty": "easy"
+}

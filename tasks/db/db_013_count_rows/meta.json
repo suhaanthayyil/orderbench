@@ -1,0 +1,10 @@
+{
+  "id": "db_013_count_rows",
+  "family": "db",
+  "title": "Count rows in a table and always close the connection",
+  "entrypoint": "count_rows",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

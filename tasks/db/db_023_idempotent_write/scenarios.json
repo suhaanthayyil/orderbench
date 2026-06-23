@@ -1,0 +1,26 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "color",
+        "blue"
+      ],
+      "expected": "ok:INSERT INTO kv(k,v) VALUES('color','blue') ON CONFLICT(k) DO UPDATE SET v='blue'"
+    },
+    {
+      "name": "fail_on_write",
+      "type": "error",
+      "args": [
+        "color",
+        "blue"
+      ],
+      "inject": {
+        "op": "execute",
+        "call_index": 1
+      },
+      "expect": "propagate"
+    }
+  ]
+}

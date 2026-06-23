@@ -1,0 +1,10 @@
+{
+  "id": "fs_014_read_config",
+  "family": "fs",
+  "title": "Read a config file and return a labelled value, always closing the handle",
+  "entrypoint": "read_config",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

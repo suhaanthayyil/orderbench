@@ -1,0 +1,26 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "SELECT 1",
+        "SELECT 2"
+      ],
+      "expected": "ok:SELECT 2"
+    },
+    {
+      "name": "fail_second_query",
+      "type": "error",
+      "args": [
+        "SELECT 1",
+        "SELECT 2"
+      ],
+      "inject": {
+        "op": "execute",
+        "call_index": 2
+      },
+      "expect": "propagate"
+    }
+  ]
+}

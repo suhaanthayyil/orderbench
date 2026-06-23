@@ -1,0 +1,178 @@
+{
+  "models": {
+    "reference": {
+      "model": "reference",
+      "n_tasks": 48,
+      "n_scenarios": 98,
+      "happy_correct": 1.0,
+      "error_correct": 1.0,
+      "cleanup_gap": 0.0,
+      "silent_misuse_rate": 0.0,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 0
+      },
+      "ci": {
+        "happy_correct": [
+          1.0,
+          1.0
+        ],
+        "error_correct": [
+          1.0,
+          1.0
+        ],
+        "cleanup_gap": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "buggy": {
+      "model": "buggy",
+      "n_tasks": 48,
+      "n_scenarios": 98,
+      "happy_correct": 1.0,
+      "error_correct": 0.0,
+      "cleanup_gap": 1.0,
+      "silent_misuse_rate": 0.4898,
+      "per_class": {
+        "order": 0,
+        "guard": 4,
+        "double": 8,
+        "unclosed": 36
+      },
+      "ci": {
+        "happy_correct": [
+          1.0,
+          1.0
+        ],
+        "error_correct": [
+          0.0,
+          0.0
+        ],
+        "cleanup_gap": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "null": {
+      "model": "null",
+      "n_tasks": 48,
+      "n_scenarios": 98,
+      "happy_correct": 0.0,
+      "error_correct": 0.0,
+      "cleanup_gap": 0.0,
+      "silent_misuse_rate": 0.0,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 0
+      },
+      "ci": {
+        "happy_correct": [
+          0.0,
+          0.0
+        ],
+        "error_correct": [
+          0.0,
+          0.0
+        ],
+        "cleanup_gap": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "claude-code:haiku": {
+      "model": "claude-code:haiku",
+      "n_tasks": 48,
+      "n_scenarios": 98,
+      "happy_correct": 0.9,
+      "error_correct": 0.9375,
+      "cleanup_gap": -0.0375,
+      "silent_misuse_rate": 0.0,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 0
+      },
+      "ci": {
+        "happy_correct": [
+          0.8542,
+          0.9896
+        ],
+        "error_correct": [
+          0.8542,
+          1.0
+        ],
+        "cleanup_gap": [
+          -0.0312,
+          0.0
+        ]
+      }
+    },
+    "claude-code:sonnet": {
+      "model": "claude-code:sonnet",
+      "n_tasks": 48,
+      "n_scenarios": 98,
+      "happy_correct": 0.92,
+      "error_correct": 0.9583,
+      "cleanup_gap": -0.0383,
+      "silent_misuse_rate": 0.0,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 0
+      },
+      "ci": {
+        "happy_correct": [
+          0.8438,
+          0.9896
+        ],
+        "error_correct": [
+          0.8958,
+          1.0
+        ],
+        "cleanup_gap": [
+          -0.0833,
+          0.0
+        ]
+      }
+    },
+    "claude-code:opus": {
+      "model": "claude-code:opus",
+      "n_tasks": 48,
+      "n_scenarios": 98,
+      "happy_correct": 0.98,
+      "error_correct": 1.0,
+      "cleanup_gap": -0.02,
+      "silent_misuse_rate": 0.0,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 0
+      },
+      "ci": {
+        "happy_correct": [
+          0.9688,
+          1.0
+        ],
+        "error_correct": [
+          1.0,
+          1.0
+        ],
+        "cleanup_gap": [
+          -0.0312,
+          0.0
+        ]
+      }
+    }
+  }
+}

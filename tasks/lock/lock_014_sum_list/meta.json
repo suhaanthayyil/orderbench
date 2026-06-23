@@ -1,0 +1,10 @@
+{
+  "id": "lock_014_sum_list",
+  "family": "lock",
+  "title": "Sum a list into the shared resource under the lock; always release",
+  "entrypoint": "sum_list",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "fs_001_uppercase_file",
+  "family": "fs",
+  "title": "Read a file, write back its upper-cased contents, return the original",
+  "entrypoint": "uppercase_file",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

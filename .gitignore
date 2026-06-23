@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.env
+
+# Pytest / tooling
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# OrderBench generated artifacts
+results/_pytest/
+results/**/solutions/
+# Keep the committed demo results + paper figures (they are the reproducible artifact):
+!results/demo/results.json
+!results/demo/rows.json
+
+# LaTeX build products
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.pdf
+paper/*.bbl
+paper/*.blg
+paper/*.synctex.gz
+
+# OS
+.DS_Store
+
+# run logs
+results/*_run.log

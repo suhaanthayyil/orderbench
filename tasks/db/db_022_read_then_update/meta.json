@@ -1,0 +1,10 @@
+{
+  "id": "db_022_read_then_update",
+  "family": "db",
+  "title": "Read a row then update it in one transaction; always close",
+  "entrypoint": "read_then_update",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

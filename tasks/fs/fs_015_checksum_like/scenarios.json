@@ -1,0 +1,34 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "blob.bin"
+      ],
+      "expected": 195,
+      "build_kwargs": {
+        "files": {
+          "blob.bin": "ab"
+        }
+      }
+    },
+    {
+      "name": "fail_in_read",
+      "type": "error",
+      "args": [
+        "blob.bin"
+      ],
+      "inject": {
+        "op": "read",
+        "call_index": 1
+      },
+      "expect": "propagate",
+      "build_kwargs": {
+        "files": {
+          "blob.bin": "ab"
+        }
+      }
+    }
+  ]
+}

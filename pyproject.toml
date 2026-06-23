@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "orderbench"
+version = "0.1.0"
+description = "A contamination-free benchmark for cleanup-on-exception in LLM-generated code"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "OrderBench authors" }]
+keywords = ["benchmark", "llm", "code-generation", "evaluation", "resource-leaks"]
+dependencies = [
+    "numpy>=1.24",
+    "matplotlib>=3.6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+anthropic = ["anthropic>=0.40"]
+openai = ["openai>=1.40"]
+
+[project.scripts]
+orderbench-validate = "orderbench._cli:validate_main"
+orderbench-eval = "orderbench._cli:eval_main"
+
+[tool.setuptools]
+packages = ["orderbench", "orderbench.mocks"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

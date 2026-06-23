@@ -1,0 +1,34 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "data.txt"
+      ],
+      "expected": 5,
+      "build_kwargs": {
+        "files": {
+          "data.txt": "abcde"
+        }
+      }
+    },
+    {
+      "name": "fail_in_read",
+      "type": "error",
+      "args": [
+        "data.txt"
+      ],
+      "inject": {
+        "op": "read",
+        "call_index": 1
+      },
+      "expect": "propagate",
+      "build_kwargs": {
+        "files": {
+          "data.txt": "abcde"
+        }
+      }
+    }
+  ]
+}

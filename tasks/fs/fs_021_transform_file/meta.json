@@ -1,0 +1,10 @@
+{
+  "id": "fs_021_transform_file",
+  "family": "fs",
+  "title": "Read a file, write back its contents with a suffix, return the transformed text",
+  "entrypoint": "transform_file",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

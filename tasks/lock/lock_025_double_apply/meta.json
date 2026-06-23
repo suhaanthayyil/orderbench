@@ -1,0 +1,10 @@
+{
+  "id": "lock_025_double_apply",
+  "family": "lock",
+  "title": "Apply a delta twice under the lock; release exactly once",
+  "entrypoint": "double_apply",
+  "misuse_classes": [
+    "guard"
+  ],
+  "difficulty": "easy"
+}

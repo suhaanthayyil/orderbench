@@ -1,0 +1,26 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "log.txt",
+        "hi"
+      ],
+      "expected": "written"
+    },
+    {
+      "name": "fail_in_write",
+      "type": "error",
+      "args": [
+        "log.txt",
+        "hi"
+      ],
+      "inject": {
+        "op": "write",
+        "call_index": 1
+      },
+      "expect": "propagate"
+    }
+  ]
+}

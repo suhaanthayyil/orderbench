@@ -1,0 +1,10 @@
+{
+  "id": "lock_013_accumulate",
+  "family": "lock",
+  "title": "Accumulate a constant step under the lock; always release",
+  "entrypoint": "accumulate",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

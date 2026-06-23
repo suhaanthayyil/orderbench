@@ -1,0 +1,10 @@
+{
+  "id": "lock_001_apply_deltas",
+  "family": "lock",
+  "title": "Apply deltas to a shared resource under the lock; always release",
+  "entrypoint": "apply_deltas",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

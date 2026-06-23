@@ -1,0 +1,36 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "notes.txt",
+        "second"
+      ],
+      "expected": "appended",
+      "build_kwargs": {
+        "files": {
+          "notes.txt": "first"
+        }
+      }
+    },
+    {
+      "name": "fail_in_read",
+      "type": "error",
+      "args": [
+        "notes.txt",
+        "second"
+      ],
+      "inject": {
+        "op": "read",
+        "call_index": 1
+      },
+      "expect": "propagate",
+      "build_kwargs": {
+        "files": {
+          "notes.txt": "first"
+        }
+      }
+    }
+  ]
+}

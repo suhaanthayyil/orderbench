@@ -1,0 +1,32 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        5,
+        3
+      ],
+      "expected": 3,
+      "build_kwargs": {
+        "value": 5
+      }
+    },
+    {
+      "name": "fail_on_add",
+      "type": "error",
+      "args": [
+        5,
+        3
+      ],
+      "inject": {
+        "op": "modify",
+        "call_index": 2
+      },
+      "expect": "propagate",
+      "build_kwargs": {
+        "value": 5
+      }
+    }
+  ]
+}

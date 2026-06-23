@@ -1,0 +1,10 @@
+{
+  "id": "fs_002_write_log",
+  "family": "fs",
+  "title": "Write a message to a file and always close the handle",
+  "entrypoint": "write_log",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

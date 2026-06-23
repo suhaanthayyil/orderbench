@@ -1,0 +1,24 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "daily_sales"
+      ],
+      "expected": "ok:REFRESH MATERIALIZED VIEW daily_sales"
+    },
+    {
+      "name": "fail_on_refresh",
+      "type": "error",
+      "args": [
+        "daily_sales"
+      ],
+      "inject": {
+        "op": "execute",
+        "call_index": 1
+      },
+      "expect": "propagate"
+    }
+  ]
+}

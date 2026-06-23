@@ -1,0 +1,24 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        10
+      ],
+      "expected": 0
+    },
+    {
+      "name": "fail_on_credit",
+      "type": "error",
+      "args": [
+        10
+      ],
+      "inject": {
+        "op": "modify",
+        "call_index": 2
+      },
+      "expect": "propagate"
+    }
+  ]
+}

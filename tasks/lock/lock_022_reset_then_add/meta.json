@@ -1,0 +1,10 @@
+{
+  "id": "lock_022_reset_then_add",
+  "family": "lock",
+  "title": "Reset the shared resource to zero then add, under the lock; always release",
+  "entrypoint": "reset_then_add",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

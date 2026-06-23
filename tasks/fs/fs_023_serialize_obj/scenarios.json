@@ -1,0 +1,28 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "obj.txt",
+        "widget",
+        3
+      ],
+      "expected": "widget:3"
+    },
+    {
+      "name": "fail_in_write",
+      "type": "error",
+      "args": [
+        "obj.txt",
+        "widget",
+        3
+      ],
+      "inject": {
+        "op": "write",
+        "call_index": 1
+      },
+      "expect": "propagate"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "fs_026_mirror_contents",
+  "family": "fs",
+  "title": "Read a file and mirror its contents back, closing the handle exactly once",
+  "entrypoint": "mirror_contents",
+  "misuse_classes": [
+    "double"
+  ],
+  "difficulty": "easy"
+}

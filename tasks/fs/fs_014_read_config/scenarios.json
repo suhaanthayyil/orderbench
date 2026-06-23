@@ -1,0 +1,34 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "app.cfg"
+      ],
+      "expected": "config:debug=true",
+      "build_kwargs": {
+        "files": {
+          "app.cfg": "debug=true"
+        }
+      }
+    },
+    {
+      "name": "fail_in_read",
+      "type": "error",
+      "args": [
+        "app.cfg"
+      ],
+      "inject": {
+        "op": "read",
+        "call_index": 1
+      },
+      "expect": "propagate",
+      "build_kwargs": {
+        "files": {
+          "app.cfg": "debug=true"
+        }
+      }
+    }
+  ]
+}

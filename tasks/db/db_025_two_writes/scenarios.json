@@ -1,0 +1,29 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "INSERT INTO logs VALUES('a')",
+        "INSERT INTO logs VALUES('b')"
+      ],
+      "expected": [
+        "ok:INSERT INTO logs VALUES('a')",
+        "ok:INSERT INTO logs VALUES('b')"
+      ]
+    },
+    {
+      "name": "fail_first_write",
+      "type": "error",
+      "args": [
+        "INSERT INTO logs VALUES('a')",
+        "INSERT INTO logs VALUES('b')"
+      ],
+      "inject": {
+        "op": "execute",
+        "call_index": 1
+      },
+      "expect": "propagate"
+    }
+  ]
+}

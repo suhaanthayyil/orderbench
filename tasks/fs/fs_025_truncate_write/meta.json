@@ -1,0 +1,10 @@
+{
+  "id": "fs_025_truncate_write",
+  "family": "fs",
+  "title": "Truncate-write a value to a file, closing the handle exactly once",
+  "entrypoint": "truncate_write",
+  "misuse_classes": [
+    "double"
+  ],
+  "difficulty": "easy"
+}

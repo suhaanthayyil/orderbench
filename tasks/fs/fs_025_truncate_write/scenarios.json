@@ -1,0 +1,26 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "t.txt",
+        "data"
+      ],
+      "expected": "ok"
+    },
+    {
+      "name": "fail_in_write",
+      "type": "error",
+      "args": [
+        "t.txt",
+        "data"
+      ],
+      "inject": {
+        "op": "write",
+        "call_index": 1
+      },
+      "expect": "propagate"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "db_024_paginated_read",
+  "family": "db",
+  "title": "Read pages in one transaction; always close the connection",
+  "entrypoint": "paginated_read",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

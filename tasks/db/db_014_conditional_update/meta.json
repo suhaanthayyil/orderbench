@@ -1,0 +1,10 @@
+{
+  "id": "db_014_conditional_update",
+  "family": "db",
+  "title": "Update a column where a condition holds and always close the connection",
+  "entrypoint": "conditional_update",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

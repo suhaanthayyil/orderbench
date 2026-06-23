@@ -1,0 +1,10 @@
+{
+  "id": "lock_011_decrement",
+  "family": "lock",
+  "title": "Decrement the shared resource under the lock; always release",
+  "entrypoint": "decrement",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

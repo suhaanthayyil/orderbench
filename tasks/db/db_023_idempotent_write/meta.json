@@ -1,0 +1,10 @@
+{
+  "id": "db_023_idempotent_write",
+  "family": "db",
+  "title": "Idempotent upsert in one transaction; close exactly once on every path",
+  "entrypoint": "idempotent_write",
+  "misuse_classes": [
+    "double"
+  ],
+  "difficulty": "medium"
+}

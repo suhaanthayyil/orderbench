@@ -1,0 +1,34 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "a.txt"
+      ],
+      "expected": "hello!",
+      "build_kwargs": {
+        "files": {
+          "a.txt": "hello"
+        }
+      }
+    },
+    {
+      "name": "fail_in_read",
+      "type": "error",
+      "args": [
+        "a.txt"
+      ],
+      "inject": {
+        "op": "read",
+        "call_index": 1
+      },
+      "expect": "propagate",
+      "build_kwargs": {
+        "files": {
+          "a.txt": "hello"
+        }
+      }
+    }
+  ]
+}

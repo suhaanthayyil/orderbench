@@ -1,0 +1,15 @@
+OrderBench task data (everything under tasks/) is licensed under the
+Creative Commons Attribution 4.0 International License (CC-BY-4.0).
+
+You are free to share and adapt the task material for any purpose, provided you
+give appropriate credit.
+
+Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Rationale: every task — natural-language prompt, reference solution, buggy
+solution, scenarios, and the mock APIs they exercise — is original work authored
+for this benchmark. No third-party source code, repository content, or contest
+problem text is redistributed. This keeps the benchmark free of upstream license
+obligations (GPL/AGPL propagation, share-alike, non-commercial clauses) and free
+of training-data contamination by construction: the mock APIs did not exist
+before publication, so no model can have memorized their usage.

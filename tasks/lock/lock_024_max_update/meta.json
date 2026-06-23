@@ -1,0 +1,10 @@
+{
+  "id": "lock_024_max_update",
+  "family": "lock",
+  "title": "Raise the shared resource to a target under the lock; always release",
+  "entrypoint": "max_update",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

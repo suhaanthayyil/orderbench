@@ -1,0 +1,10 @@
+{
+  "id": "lock_010_add_then_return",
+  "family": "lock",
+  "title": "Add an amount to the shared resource under the lock; always release",
+  "entrypoint": "add_then_return",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

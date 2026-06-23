@@ -1,0 +1,31 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        1,
+        2,
+        50
+      ],
+      "expected": [
+        "ok:UPDATE accounts SET bal=bal-50 WHERE id=1",
+        "ok:UPDATE accounts SET bal=bal+50 WHERE id=2"
+      ]
+    },
+    {
+      "name": "fail_on_credit",
+      "type": "error",
+      "args": [
+        1,
+        2,
+        50
+      ],
+      "inject": {
+        "op": "execute",
+        "call_index": 2
+      },
+      "expect": "propagate"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "lock_021_conditional_add",
+  "family": "lock",
+  "title": "Conditionally add to the shared resource under the lock; always release",
+  "entrypoint": "conditional_add",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "db_016_upsert_record",
+  "family": "db",
+  "title": "Upsert a record and close the connection exactly once",
+  "entrypoint": "upsert_record",
+  "misuse_classes": [
+    "double"
+  ],
+  "difficulty": "easy"
+}

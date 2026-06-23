@@ -1,0 +1,10 @@
+{
+  "id": "fs_020_write_record",
+  "family": "fs",
+  "title": "Write a record line to a file and always close the handle",
+  "entrypoint": "write_record",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

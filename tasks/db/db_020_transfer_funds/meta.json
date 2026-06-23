@@ -1,0 +1,10 @@
+{
+  "id": "db_020_transfer_funds",
+  "family": "db",
+  "title": "Transfer funds with two statements in one transaction; always close",
+  "entrypoint": "transfer_funds",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

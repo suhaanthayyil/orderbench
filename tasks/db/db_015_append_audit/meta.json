@@ -1,0 +1,10 @@
+{
+  "id": "db_015_append_audit",
+  "family": "db",
+  "title": "Append an audit log entry and close the connection exactly once",
+  "entrypoint": "append_audit",
+  "misuse_classes": [
+    "double"
+  ],
+  "difficulty": "easy"
+}

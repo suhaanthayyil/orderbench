@@ -1,0 +1,10 @@
+{
+  "id": "lock_020_transfer_between",
+  "family": "lock",
+  "title": "Transfer an amount on the shared resource under the lock; always release",
+  "entrypoint": "transfer_between",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

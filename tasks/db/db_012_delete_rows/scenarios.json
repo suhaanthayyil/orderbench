@@ -1,0 +1,26 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "orders",
+        "status='cancelled'"
+      ],
+      "expected": "ok:DELETE FROM orders WHERE status='cancelled'"
+    },
+    {
+      "name": "fail_in_delete",
+      "type": "error",
+      "args": [
+        "orders",
+        "status='cancelled'"
+      ],
+      "inject": {
+        "op": "execute",
+        "call_index": 1
+      },
+      "expect": "propagate"
+    }
+  ]
+}

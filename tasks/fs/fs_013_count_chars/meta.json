@@ -1,0 +1,10 @@
+{
+  "id": "fs_013_count_chars",
+  "family": "fs",
+  "title": "Count the characters in a file and always close the handle",
+  "entrypoint": "count_chars",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "fs_012_copy_contents",
+  "family": "fs",
+  "title": "Copy a file's contents back to itself and always close the handle",
+  "entrypoint": "copy_contents",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

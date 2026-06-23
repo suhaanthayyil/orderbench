@@ -1,0 +1,28 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "rec.txt",
+        "color",
+        "blue"
+      ],
+      "expected": "saved"
+    },
+    {
+      "name": "fail_in_write",
+      "type": "error",
+      "args": [
+        "rec.txt",
+        "color",
+        "blue"
+      ],
+      "inject": {
+        "op": "write",
+        "call_index": 1
+      },
+      "expect": "propagate"
+    }
+  ]
+}

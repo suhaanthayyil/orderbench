@@ -1,0 +1,28 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "accounts",
+        "active=0",
+        "last_login<'2020'"
+      ],
+      "expected": "ok:UPDATE accounts SET active=0 WHERE last_login<'2020'"
+    },
+    {
+      "name": "fail_in_update",
+      "type": "error",
+      "args": [
+        "accounts",
+        "active=0",
+        "last_login<'2020'"
+      ],
+      "inject": {
+        "op": "execute",
+        "call_index": 1
+      },
+      "expect": "propagate"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        "login"
+      ],
+      "expected": "ok:INSERT INTO audit VALUES (login)"
+    },
+    {
+      "name": "fail_in_append",
+      "type": "error",
+      "args": [
+        "login"
+      ],
+      "inject": {
+        "op": "execute",
+        "call_index": 1
+      },
+      "expect": "propagate"
+    }
+  ]
+}

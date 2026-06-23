@@ -1,0 +1,10 @@
+{
+  "id": "lock_016_guarded_update",
+  "family": "lock",
+  "title": "Apply a guarded update under the lock with a single release; never over-release",
+  "entrypoint": "guarded_update",
+  "misuse_classes": [
+    "guard"
+  ],
+  "difficulty": "easy"
+}

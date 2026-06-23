@@ -1,0 +1,34 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        [
+          2,
+          4,
+          6,
+          8
+        ]
+      ],
+      "expected": 20
+    },
+    {
+      "name": "fail_fourth_modify",
+      "type": "error",
+      "args": [
+        [
+          2,
+          4,
+          6,
+          8
+        ]
+      ],
+      "inject": {
+        "op": "modify",
+        "call_index": 4
+      },
+      "expect": "propagate"
+    }
+  ]
+}

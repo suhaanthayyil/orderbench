@@ -1,0 +1,10 @@
+{
+  "id": "db_001_run_query",
+  "family": "db",
+  "title": "Run a query inside a transaction and always close the connection",
+  "entrypoint": "run_query",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

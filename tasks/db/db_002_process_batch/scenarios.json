@@ -1,0 +1,33 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        [
+          "A",
+          "B"
+        ]
+      ],
+      "expected": [
+        "ok:A",
+        "ok:B"
+      ]
+    },
+    {
+      "name": "fail_second_stmt",
+      "type": "error",
+      "args": [
+        [
+          "A",
+          "B"
+        ]
+      ],
+      "inject": {
+        "op": "execute",
+        "call_index": 2
+      },
+      "expect": "propagate"
+    }
+  ]
+}

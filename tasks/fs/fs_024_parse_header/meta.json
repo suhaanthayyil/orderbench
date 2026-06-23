@@ -1,0 +1,10 @@
+{
+  "id": "fs_024_parse_header",
+  "family": "fs",
+  "title": "Read a file and return its first line, always closing the handle",
+  "entrypoint": "parse_header",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

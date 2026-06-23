@@ -1,0 +1,10 @@
+{
+  "id": "lock_015_bounded_add",
+  "family": "lock",
+  "title": "Add an amount under the lock with a single release; never over-release",
+  "entrypoint": "bounded_add",
+  "misuse_classes": [
+    "guard"
+  ],
+  "difficulty": "easy"
+}

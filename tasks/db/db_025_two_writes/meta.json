@@ -1,0 +1,10 @@
+{
+  "id": "db_025_two_writes",
+  "family": "db",
+  "title": "Two writes in one transaction; always close the connection",
+  "entrypoint": "two_writes",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

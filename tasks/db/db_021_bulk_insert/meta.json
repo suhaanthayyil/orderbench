@@ -1,0 +1,10 @@
+{
+  "id": "db_021_bulk_insert",
+  "family": "db",
+  "title": "Bulk-insert rows in one transaction; always close the connection",
+  "entrypoint": "bulk_insert",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "lock_002_increment_counter",
+  "family": "lock",
+  "title": "Increment the shared counter under the lock; always release",
+  "entrypoint": "increment_counter",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

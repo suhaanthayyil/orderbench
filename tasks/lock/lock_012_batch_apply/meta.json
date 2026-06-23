@@ -1,0 +1,10 @@
+{
+  "id": "lock_012_batch_apply",
+  "family": "lock",
+  "title": "Apply a batch of deltas under the lock; always release",
+  "entrypoint": "batch_apply",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

@@ -1,0 +1,30 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        42
+      ],
+      "expected": 42,
+      "build_kwargs": {
+        "value": 42
+      }
+    },
+    {
+      "name": "fail_in_modify",
+      "type": "error",
+      "args": [
+        42
+      ],
+      "inject": {
+        "op": "modify",
+        "call_index": 1
+      },
+      "expect": "propagate",
+      "build_kwargs": {
+        "value": 42
+      }
+    }
+  ]
+}

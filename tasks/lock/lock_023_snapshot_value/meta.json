@@ -1,0 +1,10 @@
+{
+  "id": "lock_023_snapshot_value",
+  "family": "lock",
+  "title": "Snapshot the shared resource under the lock; always release",
+  "entrypoint": "snapshot_value",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

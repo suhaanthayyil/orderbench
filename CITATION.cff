@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use OrderBench, please cite the accompanying paper."
+title: "OrderBench: Measuring Cleanup-on-Exception in LLM-Generated Code"
+abstract: >-
+  A contamination-free, copyright-clean benchmark built on self-authored,
+  instrumented mock APIs. It exposes a failure mode invisible to output-only
+  benchmarks: code that returns correct results yet leaks resources, skips
+  rollbacks, or unbalances locks on injected error paths.
+authors:
+  - family-names: "Authors"
+    given-names: "OrderBench"
+version: 0.1.0
+date-released: "2026-06-30"
+license: MIT
+keywords:
+  - benchmark
+  - large language models
+  - code generation
+  - resource management
+  - evaluation

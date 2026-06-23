@@ -1,0 +1,10 @@
+{
+  "id": "db_002_process_batch",
+  "family": "db",
+  "title": "Execute a batch of statements in one transaction; always close",
+  "entrypoint": "process_batch",
+  "misuse_classes": [
+    "unclosed"
+  ],
+  "difficulty": "easy"
+}

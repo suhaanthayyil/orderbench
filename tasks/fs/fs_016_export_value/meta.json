@@ -1,0 +1,10 @@
+{
+  "id": "fs_016_export_value",
+  "family": "fs",
+  "title": "Export a value to a file, closing the handle exactly once",
+  "entrypoint": "export_value",
+  "misuse_classes": [
+    "double"
+  ],
+  "difficulty": "easy"
+}

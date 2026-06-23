@@ -1,0 +1,10 @@
+{
+  "id": "db_026_refresh_view",
+  "family": "db",
+  "title": "Refresh a materialized view in one transaction; close exactly once",
+  "entrypoint": "refresh_view",
+  "misuse_classes": [
+    "double"
+  ],
+  "difficulty": "medium"
+}

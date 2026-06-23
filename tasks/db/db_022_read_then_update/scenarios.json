@@ -1,0 +1,26 @@
+{
+  "scenarios": [
+    {
+      "name": "happy",
+      "type": "happy",
+      "args": [
+        7,
+        99
+      ],
+      "expected": "ok:UPDATE t SET v=99 WHERE id=7"
+    },
+    {
+      "name": "fail_on_update",
+      "type": "error",
+      "args": [
+        7,
+        99
+      ],
+      "inject": {
+        "op": "execute",
+        "call_index": 2
+      },
+      "expect": "propagate"
+    }
+  ]
+}
