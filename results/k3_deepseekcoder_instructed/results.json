@@ -1,0 +1,33 @@
+{
+  "models": {
+    "ollama:deepseek-coder:6.7b": {
+      "model": "ollama:deepseek-coder:6.7b",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 0.5133,
+      "error_correct": 0.4653,
+      "cleanup_gap": 0.0481,
+      "silent_misuse_rate": 0.017,
+      "per_class": {
+        "order": 0,
+        "guard": 1,
+        "double": 2,
+        "unclosed": 9
+      },
+      "ci": {
+        "happy_correct": [
+          0.4028,
+          0.5903
+        ],
+        "error_correct": [
+          0.3819,
+          0.5556
+        ],
+        "cleanup_gap": [
+          -0.0347,
+          0.1042
+        ]
+      }
+    }
+  }
+}

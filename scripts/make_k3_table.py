@@ -13,7 +13,8 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TAGS = ["k3_claude_neutral", "k3_gemma_neutral", "k3_gpt_neutral", "k3_gpt2_neutral"]
+TAGS = ["k3_claude_neutral", "k3_gemma_neutral", "k3_qwen25coder_neutral",
+        "k3_deepseekcoder_neutral", "k3_gpt_neutral", "k3_gpt2_neutral"]
 BASE = {"reference", "buggy", "null"}
 ORDER = ["claude-code:opus", "claude-code:sonnet", "claude-code:haiku", "ollama:gemma4:12b",
          "openai:gpt-5.5", "openai:gpt-5.4-mini", "openai:gpt-5.4-nano",
@@ -21,6 +22,7 @@ ORDER = ["claude-code:opus", "claude-code:sonnet", "claude-code:haiku", "ollama:
          "openai:gpt-4.1", "openai:gpt-4.1-mini", "openai:gpt-4.1-nano", "openai:gpt-4o-mini"]
 LABEL = {"claude-code:opus": "Claude Opus", "claude-code:sonnet": "Claude Sonnet",
          "claude-code:haiku": "Claude Haiku", "ollama:gemma4:12b": "gemma 12B",
+         "ollama:qwen2.5-coder:7b": "Qwen2.5-Coder 7B", "ollama:deepseek-coder:6.7b": "DeepSeek-Coder 6.7B",
          "openai:gpt-5.5": "GPT-5.5", "openai:gpt-5.4-mini": "GPT-5.4-mini",
          "openai:gpt-5.4-nano": "GPT-5.4-nano", "openai:gpt-5": "GPT-5", "openai:gpt-5-mini": "GPT-5-mini",
          "openai:gpt-4.1": "GPT-4.1", "openai:gpt-4.1-mini": "GPT-4.1-mini",
