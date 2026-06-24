@@ -23,11 +23,12 @@ ORDER = ["claude-code:opus", "claude-code:sonnet", "claude-code:haiku", "ollama:
          "openai:gpt-5.5", "openai:gpt-5.4-mini", "openai:gpt-5.4-nano",
          "openai:gpt-5", "openai:gpt-5-mini",
          "openai:gpt-4.1", "openai:gpt-4.1-mini", "openai:gpt-4.1-nano", "openai:gpt-4o-mini"]
-LABEL = {"claude-code:opus": "Opus", "claude-code:sonnet": "Sonnet", "claude-code:haiku": "Haiku",
-         "ollama:gemma4:12b": "gemma", "openai:gpt-5.5": "GPT-5.5", "openai:gpt-5.4-mini": "5.4-mini",
-         "openai:gpt-5.4-nano": "5.4-nano", "openai:gpt-5": "GPT-5", "openai:gpt-5-mini": "5-mini",
-         "openai:gpt-4.1": "GPT-4.1", "openai:gpt-4.1-mini": "4.1-mini",
-         "openai:gpt-4.1-nano": "4.1-nano", "openai:gpt-4o-mini": "4o-mini"}
+LABEL = {"claude-code:opus": "Claude Opus", "claude-code:sonnet": "Claude Sonnet",
+         "claude-code:haiku": "Claude Haiku", "ollama:gemma4:12b": "gemma 12B",
+         "openai:gpt-5.5": "GPT-5.5", "openai:gpt-5.4-mini": "GPT-5.4-mini",
+         "openai:gpt-5.4-nano": "GPT-5.4-nano", "openai:gpt-5": "GPT-5", "openai:gpt-5-mini": "GPT-5-mini",
+         "openai:gpt-4.1": "GPT-4.1", "openai:gpt-4.1-mini": "GPT-4.1-mini",
+         "openai:gpt-4.1-nano": "GPT-4.1-nano", "openai:gpt-4o-mini": "GPT-4o-mini"}
 
 
 def load(tags):
