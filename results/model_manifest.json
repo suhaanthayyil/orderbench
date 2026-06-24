@@ -1,0 +1,92 @@
+{
+  "openai:gpt-4o-mini": {
+    "adapter": "openai",
+    "requested": "gpt-4o-mini",
+    "vendor_returned_id": "gpt-4o-mini-2024-07-18",
+    "access_date": "2026-06-23"
+  },
+  "openai:gpt-4.1": {
+    "adapter": "openai",
+    "requested": "gpt-4.1",
+    "vendor_returned_id": "gpt-4.1-2025-04-14",
+    "access_date": "2026-06-23"
+  },
+  "openai:gpt-4.1-mini": {
+    "adapter": "openai",
+    "requested": "gpt-4.1-mini",
+    "vendor_returned_id": "gpt-4.1-mini-2025-04-14",
+    "access_date": "2026-06-23"
+  },
+  "openai:gpt-4.1-nano": {
+    "adapter": "openai",
+    "requested": "gpt-4.1-nano",
+    "vendor_returned_id": "gpt-4.1-nano-2025-04-14",
+    "access_date": "2026-06-23"
+  },
+  "openai:gpt-5": {
+    "adapter": "openai",
+    "requested": "gpt-5",
+    "vendor_returned_id": "gpt-5-2025-08-07",
+    "access_date": "2026-06-23"
+  },
+  "openai:gpt-5-mini": {
+    "adapter": "openai",
+    "requested": "gpt-5-mini",
+    "vendor_returned_id": "gpt-5-mini-2025-08-07",
+    "access_date": "2026-06-23"
+  },
+  "openai:gpt-5.4-mini": {
+    "adapter": "openai",
+    "requested": "gpt-5.4-mini",
+    "vendor_returned_id": "gpt-5.4-mini-2026-03-17",
+    "access_date": "2026-06-23"
+  },
+  "openai:gpt-5.4-nano": {
+    "adapter": "openai",
+    "requested": "gpt-5.4-nano",
+    "vendor_returned_id": "gpt-5.4-nano-2026-03-17",
+    "access_date": "2026-06-23"
+  },
+  "openai:gpt-5.5": {
+    "adapter": "openai",
+    "requested": "gpt-5.5",
+    "vendor_returned_id": "gpt-5.5-2026-04-23",
+    "access_date": "2026-06-23"
+  },
+  "claude-code:opus": {
+    "adapter": "claude-code (CLI)",
+    "requested": "opus",
+    "vendor_returned_id": "resolved by Claude Code CLI (opus alias)",
+    "access_date": "2026-06-23"
+  },
+  "claude-code:sonnet": {
+    "adapter": "claude-code (CLI)",
+    "requested": "sonnet",
+    "vendor_returned_id": "resolved by Claude Code CLI (sonnet alias)",
+    "access_date": "2026-06-23"
+  },
+  "claude-code:haiku": {
+    "adapter": "claude-code (CLI)",
+    "requested": "haiku",
+    "vendor_returned_id": "resolved by Claude Code CLI (haiku alias)",
+    "access_date": "2026-06-23"
+  },
+  "ollama:gemma4:12b": {
+    "adapter": "ollama (local weights)",
+    "requested": "gemma4:12b",
+    "vendor_returned_id": "gemma4:12b",
+    "access_date": "2026-06-23"
+  },
+  "ollama:qwen3-coder:30b": {
+    "adapter": "ollama (local weights)",
+    "requested": "qwen3-coder:30b",
+    "vendor_returned_id": "qwen3-coder:30b",
+    "access_date": "2026-06-23"
+  },
+  "ollama:deepseek-coder-v2:16b": {
+    "adapter": "ollama (local weights)",
+    "requested": "deepseek-coder-v2:16b",
+    "vendor_returned_id": "deepseek-coder-v2:16b",
+    "access_date": "2026-06-23"
+  }
+}

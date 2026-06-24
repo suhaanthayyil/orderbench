@@ -1,0 +1,33 @@
+{
+  "models": {
+    "ollama:qwen3-coder:30b": {
+      "model": "ollama:qwen3-coder:30b",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 0.8667,
+      "error_correct": 0.5486,
+      "cleanup_gap": 0.3181,
+      "silent_misuse_rate": 0.1565,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 46
+      },
+      "ci": {
+        "happy_correct": [
+          0.7569,
+          0.9444
+        ],
+        "error_correct": [
+          0.4095,
+          0.6875
+        ],
+        "cleanup_gap": [
+          0.1806,
+          0.4583
+        ]
+      }
+    }
+  }
+}
