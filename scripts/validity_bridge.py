@@ -51,6 +51,14 @@ def _sqlite_leaked(c) -> bool:
         return False
 
 
+def _exec_leaked(ex) -> bool:
+    """A shut-down pool rejects new work with RuntimeError; a leaked one still accepts it."""
+    try:
+        ex.submit(lambda: None); return True         # accepted -> not shut down -> leaked
+    except RuntimeError:
+        return False
+
+
 PRIMS = [
     Primitive("sqlite3.Connection", "unclosed",
               acquire=lambda: sqlite3.connect(":memory:"),
@@ -87,13 +95,13 @@ PRIMS = [
               happy_op=lambda sm: "ok",
               fail_op=lambda sm: (_ for _ in ()).throw(InjectedError()),
               release=lambda sm: sm.release(),
-              leaked=lambda sm: sm._value == 0),
+              leaked=lambda sm: not sm.acquire(blocking=False)),  # permit not restored
     Primitive("futures.ThreadPoolExecutor", "unclosed",
               acquire=lambda: ThreadPoolExecutor(max_workers=1),
               happy_op=lambda ex: (ex.submit(lambda: "ok").result()),
               fail_op=lambda ex: (_ for _ in ()).throw(InjectedError()),
               release=lambda ex: ex.shutdown(wait=True),
-              leaked=lambda ex: not ex._shutdown),
+              leaked=_exec_leaked),  # still accepts work after the error -> not shut down
     Primitive("asyncio.Lock", "unclosed (held)",
               acquire=lambda: _aacq(asyncio.Lock()),
               happy_op=lambda lk: "ok",

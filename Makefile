@@ -61,8 +61,11 @@ ext-tables:
 k3-table:
 	python3 scripts/make_k3_table.py
 
+headline:
+	python3 scripts/make_headline.py && python3 scripts/make_ablation_fig.py
+
 repair-table:
 	python3 scripts/run_repair.py --models claude-code:haiku claude-code:sonnet
 
-reproduce-tables: ablation ext-tables k3-table bridge
-	@echo "regenerated all paper tables into out/tables/"
+reproduce-tables: ablation headline ext-tables k3-table bridge
+	@echo "regenerated all paper tables/figures into out/"
