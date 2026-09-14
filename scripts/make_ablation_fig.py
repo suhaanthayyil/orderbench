@@ -67,7 +67,7 @@ def main() -> int:
     nsd = [st.pstdev(gaps_by_rep(neut, m)) if len(gaps_by_rep(neut, m)) > 1 else 0 for m in models]
 
     x = range(len(models))
-    fig, ax = plt.subplots(figsize=(10.5, 3.4))
+    fig, ax = plt.subplots(figsize=(3.5, 2.6))
     ax.bar([i - 0.21 for i in x], im, width=0.4, label="instructed", color="#6baed6")
     ax.bar([i + 0.21 for i in x], nm, width=0.4, yerr=nsd, capsize=3, label="neutral",
            color="#fb6a4a", error_kw={"elinewidth": 0.9})
@@ -81,7 +81,7 @@ def main() -> int:
     fig.tight_layout()
     for out in [ROOT / "out/figures/ablation_gap.png", ROOT / "paper/figures/ablation_gap.png"]:
         out.parent.mkdir(parents=True, exist_ok=True)
-        fig.savefig(out, dpi=200, bbox_inches="tight")
+        fig.savefig(out, dpi=400, bbox_inches="tight")
     print(f"wrote ablation_gap.png (k=3, {len(models)} models, neutral error bars)")
     print("  neutral k3 means:", {LABEL[m]: round(v) for m, v in zip(models, nm)})
     return 0

@@ -23,11 +23,14 @@ can make ``modify`` raise while the lock is held to probe release-on-exception.
 
 from __future__ import annotations
 
-from ..invariants import Injectable, RunContext
+from ..invariants import ContextManaged, Injectable, RunContext
 
 
-class MockReentrantLock:
+class MockReentrantLock(ContextManaged):
     _name = "lock"
+    # `with env.lock:` acquires on entry and releases on exit, as threading.RLock does.
+    _cm_acquire = "acquire"
+    _cm_release = "release"
 
     def __init__(self, ctx: RunContext) -> None:
         self._ctx = ctx

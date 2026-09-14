@@ -131,3 +131,63 @@ class Injectable:
         self._op_counts[op] = n
         if op == self._inj_op and n == self._inj_index:
             raise self._inj_exc or InjectedError(f"injected fault at {op}#{n}")
+
+
+# -- context-manager ablation ----------------------------------------------
+#
+# The published suite's mocks are *method-only*: they expose ``close()`` / ``release()``
+# and nothing else, so ``with resource:`` raises ``TypeError`` exactly as it does on any
+# Python object that lacks ``__exit__``. That is a deliberate property of the benchmark
+# (the candidate must write the cleanup, not delegate it), but it is also a possible
+# confound: a model whose dominant learned idiom is the context manager could be pushed
+# off its usual safety mechanism by the interface rather than by a lack of discipline.
+#
+# ``set_cm_support(True)`` turns the protocol on for every instrumented resource, making
+# ``with`` a legitimate way to satisfy the cleanup obligation. Crossing it with the prompt
+# conditions is the context-manager ablation. Default is off, so every result collected
+# against the method-only mocks re-grades identically.
+
+_CM_SUPPORT = False
+
+
+def set_cm_support(enabled: bool) -> None:
+    """Enable/disable ``__enter__``/``__exit__`` on the instrumented resources."""
+    global _CM_SUPPORT
+    _CM_SUPPORT = bool(enabled)
+
+
+def cm_support() -> bool:
+    """Whether the instrumented resources currently expose the context-manager protocol."""
+    return _CM_SUPPORT
+
+
+class ContextManaged:
+    """Opt-in context-manager protocol for an instrumented resource.
+
+    ``_cm_acquire`` / ``_cm_release`` name the *existing* instrumented methods the
+    protocol delegates to, so a ``with`` block travels the same state machine -- and
+    trips the same violations -- as a hand-written ``try/finally``. When support is
+    off, both hooks raise the ``TypeError`` Python itself raises for an object with no
+    ``__exit__``, so the method-only behaviour is preserved verbatim.
+    """
+
+    _cm_acquire: str | None = None
+    _cm_release: str = "close"
+
+    def _cm_unsupported(self) -> TypeError:
+        return TypeError(
+            f"{type(self).__name__!r} object does not support the context manager protocol"
+        )
+
+    def __enter__(self):
+        if not _CM_SUPPORT:
+            raise self._cm_unsupported()
+        if self._cm_acquire is not None:
+            getattr(self, self._cm_acquire)()
+        return self
+
+    def __exit__(self, exc_type, exc, tb) -> bool:
+        if not _CM_SUPPORT:
+            raise self._cm_unsupported()
+        getattr(self, self._cm_release)()
+        return False  # never swallow the exception: the fault must still propagate

@@ -10,6 +10,7 @@ or their redundancy. Writes out/tables/cue2x2.tex.
 from __future__ import annotations
 
 import json
+import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -40,6 +41,8 @@ def gaps_for(tags):
     for tag in tags:
         p = ROOT / "results" / tag / "rows.json"
         if not p.exists():
+            print(f"  WARNING: tag {tag!r} has no rows.json -- its models are absent "
+                  f"from this table", file=sys.stderr)
             continue
         for r in json.loads(p.read_text()):
             if r["model"] in BASE or r.get("rep", 0) != 0:

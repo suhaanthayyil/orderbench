@@ -21,11 +21,12 @@ so a test can make e.g. ``read`` raise to probe cleanup-on-exception.
 
 from __future__ import annotations
 
-from ..invariants import Injectable, RunContext
+from ..invariants import ContextManaged, Injectable, RunContext
 
 
-class MockHandle(Injectable):
+class MockHandle(ContextManaged, Injectable):
     _name = "handle"
+    _cm_release = "close"   # `with fs.open(path) as h:` closes on exit
 
     def __init__(self, ctx: RunContext, path: str, contents: str) -> None:
         self._init_injection()

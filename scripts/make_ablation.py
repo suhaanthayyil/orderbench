@@ -2,7 +2,8 @@
 
 Reads results/{panel,panel_neutral,gpt_instructed,gpt_neutral}; writes:
   out/figures/ablation_gap.png
-  out/tables/ablation.tex     (per-model instructed vs neutral gap, 95% CI, silent, leaks)
+  out/tables/ablation_k1.tex  (per-model instructed vs neutral gap at k=1, 95% CI, silent, leaks;
+                              the paper table is the k=3 ablation.tex from make_headline.py)
   out/tables/perfamily.tex    (per-model neutral gap by resource family db/fs/lock)
 """
 
@@ -79,7 +80,7 @@ def main() -> int:
             f"{pc(n['silent_misuse_rate'])} & {leaks} \\\\"
         )
     lines += [r"\bottomrule", r"\end{tabular}"]
-    (ROOT / "out/tables/ablation.tex").write_text("\n".join(lines))
+    (ROOT / "out/tables/ablation_k1.tex").write_text("\n".join(lines))
 
     # ---- per-family neutral cleanup gap ----
     rows = _rows("results/panel_neutral/rows.json", "results/gpt_neutral/rows.json", "results/gpt2_neutral/rows.json")
@@ -108,7 +109,7 @@ def main() -> int:
     flines += [r"\bottomrule", r"\end{tabular}"]
     (ROOT / "out/tables/perfamily.tex").write_text("\n".join(flines))
 
-    print("wrote ablation.tex (with CIs) + perfamily.tex + ablation_gap.png")
+    print("wrote ablation_k1.tex (with CIs) + perfamily.tex + ablation_gap.png")
     print("\nper-family neutral gap (pp):  model            db    fs   lock")
     for m in models:
         print(f"  {LABEL[m]:16} {gap(m,'db'):6.0f} {gap(m,'fs'):5.0f} {gap(m,'lock'):6.0f}")

@@ -35,3 +35,4 @@ results/*_run.log
 
 # run logs
 results/*.log
+uv.lock

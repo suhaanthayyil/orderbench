@@ -2,14 +2,22 @@
 model identifier (for API models we issue one tiny request and record the resolved snapshot id
 the vendor returns), and the access date. Provides an audit trail for the exact model snapshots.
 
-Usage: source the OpenAI key first, then `python scripts/model_manifest.py`. OpenAI models are
-probed live; Claude (Claude Code CLI) and Ollama models are recorded by name (the CLI/local
-runtime resolves them).
+The Claude arm runs through the Claude Code CLI, which resolves an alias (opus/sonnet/haiku)
+to whatever snapshot is current on the run date. Recording only the alias -- as this script
+used to -- left the Claude rows unreproducible in a way the OpenAI rows were not, so the CLI
+is probed too: `claude -p --output-format json` reports the concrete snapshot under
+`modelUsage`, and the CLI's own version is recorded alongside it.
+
+Usage: `python scripts/model_manifest.py`. Claude and Ollama models need no key; the OpenAI
+probes are skipped with a note when no key is present.
 """
 from __future__ import annotations
 
 import datetime
 import json
+import os
+import shutil
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,14 +43,48 @@ def probe_openai(model: str) -> str:
     return f"<probe-failed: {type(last).__name__}>"
 
 
+def claude_cli_version() -> str:
+    try:
+        return subprocess.run(["claude", "--version"], capture_output=True, text=True,
+                              timeout=60).stdout.strip()
+    except Exception as e:
+        return f"<version-probe-failed: {type(e).__name__}>"
+
+
+def probe_claude(alias: str) -> str:
+    """Resolve a Claude Code alias to the concrete snapshot id the CLI actually called."""
+    try:
+        out = subprocess.run(
+            ["claude", "-p", "--model", alias, "--output-format", "json",
+             "--disallowed-tools", "Bash", "Read", "Write", "Edit", "Glob", "Grep",
+             "WebFetch", "WebSearch"],
+            input="Reply with only the word OK.",
+            capture_output=True, text=True, timeout=300,
+        )
+        used = list(json.loads(out.stdout).get("modelUsage", {}))
+        return used[0] if used else "<no modelUsage in CLI response>"
+    except Exception as e:
+        return f"<probe-failed: {type(e).__name__}>"
+
+
 def main() -> int:
     manifest = {}
-    for m in OPENAI:
-        manifest[f"openai:{m}"] = {"adapter": "openai", "requested": m,
-                                   "vendor_returned_id": probe_openai(m), "access_date": TODAY}
+    if os.environ.get("OPENAI_API_KEY"):
+        for m in OPENAI:
+            manifest[f"openai:{m}"] = {"adapter": "openai", "requested": m,
+                                       "vendor_returned_id": probe_openai(m),
+                                       "access_date": TODAY}
+    else:
+        print("OPENAI_API_KEY not set -- keeping any previously recorded OpenAI entries")
+        prev = ROOT / "results" / "model_manifest.json"
+        if prev.exists():
+            manifest.update({k: v for k, v in json.loads(prev.read_text()).items()
+                             if k.startswith("openai:")})
+    cli_version = claude_cli_version()
     for a in CLAUDE:
         manifest[f"claude-code:{a}"] = {"adapter": "claude-code (CLI)", "requested": a,
-                                        "vendor_returned_id": f"resolved by Claude Code CLI ({a} alias)",
+                                        "vendor_returned_id": probe_claude(a),
+                                        "harness_version": cli_version,
                                         "access_date": TODAY}
     for m in OLLAMA:
         manifest[f"ollama:{m}"] = {"adapter": "ollama (local weights)", "requested": m,

@@ -142,6 +142,25 @@ def _run_error(p: Primitive) -> bool:
     return leaked
 
 
+def _run_reference_error(p: Primitive) -> bool:
+    """The REFERENCE solution on the error path; return whether it leaks (it must not).
+
+    Previously this arm was asserted rather than run -- `ref_leaks = False`, on the argument
+    that a `finally` always executes. That is sound reasoning but it is not a measurement, and
+    it left the bridge unable to detect a probe that reports "leaked" for a released resource.
+    Executing it makes the reference arm a real control: if `leaked()` is wrong, this fails.
+    """
+    res = p.acquire()
+    try:
+        try:
+            p.fail_op(res)    # raises, exactly as in the buggy arm
+        finally:
+            p.release(res)    # reference: released on every path
+    except Exception:
+        pass
+    return p.leaked(res)
+
+
 def _run_happy(p: Primitive):
     """both solutions on the happy path return the same output (output-only can't tell)."""
     res = p.acquire()
@@ -160,27 +179,28 @@ def main() -> int:
     ok = True
     for p in PRIMS:
         buggy_leaks = _run_error(p)
-        # reference: identical structure but release in finally -> never leaks. We assert the
-        # property directly: a released resource is not leaked (the finally path always runs).
-        ref_leaks = False
+        ref_leaks = _run_reference_error(p)   # measured control, not assumed
         happy_out = _run_happy(p)
         output_only_passes = happy_out is not None  # buggy returns the same happy output
-        rows.append((p.name, p.mock_class, output_only_passes, buggy_leaks))
+        rows.append((p.name, p.mock_class, output_only_passes, buggy_leaks, ref_leaks))
         if ref_leaks or not buggy_leaks or not output_only_passes:
             ok = False
+            print(f"  FAIL {p.name}: ref_leaks={ref_leaks} buggy_leaks={buggy_leaks} "
+                  f"output_only_passes={output_only_passes}")
 
     # ---- console table ----
-    print(f"{'real stdlib primitive':26} {'output-only':12} {'leak on':9} {'mock class'}")
-    print(f"{'':26} {'accepts?':12} {'error?':9}")
-    print("-" * 70)
-    for name, cls, oo, leak in rows:
-        print(f"{name:26} {'yes':12} {'YES' if leak else 'no':9} {cls}")
+    print(f"{'real stdlib primitive':26} {'output-only':12} {'buggy':9} {'ref':6} {'mock class'}")
+    print(f"{'':26} {'accepts?':12} {'leaks?':9} {'leaks?':6}")
+    print("-" * 78)
+    for name, cls, oo, leak, refleak in rows:
+        print(f"{name:26} {'yes' if oo else 'NO':12} {'YES' if leak else 'no':9} "
+              f"{'YES' if refleak else 'no':6} {cls}")
 
     # ---- LaTeX table ----
     tex = [r"\begin{tabular}{llcc}", r"\toprule",
            r"Real stdlib primitive & OrderBench class & Output-only & Leak on \\",
            r" & (mock equiv.) & accepts? & error? \\", r"\midrule"]
-    for name, cls, oo, leak in rows:
+    for name, cls, oo, leak, refleak in rows:
         nm = name.replace("_", r"\_")
         tex.append(rf"\texttt{{{nm}}} & {cls} & \cmark & \cmark \\")
     tex += [r"\bottomrule", r"\end{tabular}"]

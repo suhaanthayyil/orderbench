@@ -24,11 +24,12 @@ so a test can make e.g. ``execute`` raise mid-transaction to probe cleanup-on-ex
 
 from __future__ import annotations
 
-from ..invariants import Injectable, RunContext
+from ..invariants import ContextManaged, Injectable, RunContext
 
 
-class MockConnection(Injectable):
+class MockConnection(ContextManaged, Injectable):
     _name = "connection"
+    _cm_release = "close"   # `with pool.connect() as conn:` closes on exit
 
     def __init__(self, ctx: RunContext) -> None:
         self._init_injection()

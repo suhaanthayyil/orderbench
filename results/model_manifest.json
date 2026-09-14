@@ -56,37 +56,40 @@
   "claude-code:opus": {
     "adapter": "claude-code (CLI)",
     "requested": "opus",
-    "vendor_returned_id": "resolved by Claude Code CLI (opus alias)",
-    "access_date": "2026-06-23"
+    "vendor_returned_id": "claude-opus-5",
+    "harness_version": "2.1.263 (Claude Code)",
+    "access_date": "2026-09-13"
   },
   "claude-code:sonnet": {
     "adapter": "claude-code (CLI)",
     "requested": "sonnet",
-    "vendor_returned_id": "resolved by Claude Code CLI (sonnet alias)",
-    "access_date": "2026-06-23"
+    "vendor_returned_id": "claude-sonnet-5",
+    "harness_version": "2.1.263 (Claude Code)",
+    "access_date": "2026-09-13"
   },
   "claude-code:haiku": {
     "adapter": "claude-code (CLI)",
     "requested": "haiku",
-    "vendor_returned_id": "resolved by Claude Code CLI (haiku alias)",
-    "access_date": "2026-06-23"
+    "vendor_returned_id": "claude-haiku-4-5-20251001",
+    "harness_version": "2.1.263 (Claude Code)",
+    "access_date": "2026-09-13"
   },
   "ollama:gemma4:12b": {
     "adapter": "ollama (local weights)",
     "requested": "gemma4:12b",
     "vendor_returned_id": "gemma4:12b",
-    "access_date": "2026-06-23"
+    "access_date": "2026-09-13"
   },
   "ollama:qwen3-coder:30b": {
     "adapter": "ollama (local weights)",
     "requested": "qwen3-coder:30b",
     "vendor_returned_id": "qwen3-coder:30b",
-    "access_date": "2026-06-23"
+    "access_date": "2026-09-13"
   },
   "ollama:deepseek-coder-v2:16b": {
     "adapter": "ollama (local weights)",
     "requested": "deepseek-coder-v2:16b",
     "vendor_returned_id": "deepseek-coder-v2:16b",
-    "access_date": "2026-06-23"
+    "access_date": "2026-09-13"
   }
 }

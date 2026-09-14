@@ -1,7 +1,7 @@
 """Headline ablation table at k=3: per-model instructed and neutral cleanup gap reported as the
 mean over three generations, with the generation SD on the neutral gap and a percentile
-bootstrap CI over tasks. Overwrites paper-table ablation.tex (run after make_ablation, which
-also produces perfamily.tex and the figure).
+bootstrap CI over tasks. This is the paper's ablation.tex; make_ablation.py writes the k=1
+variant as ablation_k1.tex and also produces perfamily.tex and the figure.
 
 Reads the k3_*_{neutral,instructed} tags. silent-misuse and leak counts are taken at rep0
 (interpretable as counts over the 48 error scenarios). Writes out/tables/ablation.tex.
@@ -19,9 +19,9 @@ sys.path.insert(0, str(ROOT))
 from orderbench.metrics import _bootstrap_ci  # noqa: E402
 
 NEUT = ["k3_claude_neutral", "k3_gemma_neutral", "k3_gpt_neutral", "k3_gpt2_neutral",
-        "k3_qwen25coder_neutral", "k3_deepseekcoder_neutral"]
+        "k3_qwen3_neutral", "k3_dsv2_neutral"]
 INSTR = ["k3_claude_instructed", "k3_gemma_instructed", "k3_gpt_instructed", "k3_gpt2_instructed",
-         "k3_qwen25coder_instructed", "k3_deepseekcoder_instructed"]
+         "k3_qwen3_instructed", "k3_dsv2_instructed"]
 BASE = {"reference", "buggy", "null"}
 ORDER = ["claude-code:opus", "claude-code:sonnet", "claude-code:haiku", "ollama:gemma4:12b",
          "openai:gpt-5.5", "openai:gpt-5.4-mini", "openai:gpt-5.4-nano",
@@ -41,6 +41,8 @@ def load(tags):
     for t in tags:
         p = ROOT / "results" / t / "rows.json"
         if not p.exists():
+            print(f"  WARNING: tag {t!r} has no rows.json -- its models are absent from this table",
+                  file=sys.stderr)
             continue
         data = json.loads(p.read_text())
         fresh = {r["model"] for r in data if r["model"] not in BASE} - seen

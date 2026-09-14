@@ -8,13 +8,14 @@ Writes out/tables/k3.tex.
 from __future__ import annotations
 
 import json
+import sys
 import statistics as st
 from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TAGS = ["k3_claude_neutral", "k3_gemma_neutral", "k3_qwen25coder_neutral",
-        "k3_deepseekcoder_neutral", "k3_gpt_neutral", "k3_gpt2_neutral"]
+TAGS = ["k3_claude_neutral", "k3_gemma_neutral", "k3_qwen3_neutral",
+        "k3_dsv2_neutral", "k3_gpt_neutral", "k3_gpt2_neutral"]
 BASE = {"reference", "buggy", "null"}
 ORDER = ["claude-code:opus", "claude-code:sonnet", "claude-code:haiku", "ollama:gemma4:12b",
          "openai:gpt-5.5", "openai:gpt-5.4-mini", "openai:gpt-5.4-nano",
@@ -52,8 +53,11 @@ def main() -> int:
     rows = []
     for t in TAGS:
         p = ROOT / "results" / t / "rows.json"
-        if p.exists():
-            rows += json.loads(p.read_text())
+        if not p.exists():
+            print(f"  WARNING: tag {t!r} has no rows.json -- its models are absent "
+                  f"from this table", file=sys.stderr)
+            continue
+        rows += json.loads(p.read_text())
     gaps = gap_per_rep(rows)
     models = [m for m in ORDER if m in gaps]
 

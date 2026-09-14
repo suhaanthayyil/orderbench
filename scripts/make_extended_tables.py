@@ -11,6 +11,7 @@ falling back to the original k=1 tags, so it works before and after the k=3 runs
 from __future__ import annotations
 
 import json
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -20,8 +21,6 @@ ROOT = Path(__file__).resolve().parents[1]
 NEUTRAL_TAGS = [
     ("k3_claude_neutral", "panel_neutral"),
     ("k3_gemma_neutral", "panel_neutral"),
-    ("k3_qwen25coder_neutral", "k3_qwen25coder_neutral"),
-    ("k3_deepseekcoder_neutral", "k3_deepseekcoder_neutral"),
     ("k3_gpt_neutral", "gpt_neutral"),
     ("k3_gpt2_neutral", "gpt2_neutral"),
 ]
@@ -59,6 +58,11 @@ def load_neutral_rows() -> list[dict]:
             rows += [r for r in data if r["model"] in fresh]
             seen_models |= fresh
             break
+        else:
+            # Neither the k=3 tag nor its k=1 fallback exists: those models are silently
+            # missing from every table built here, so say so.
+            print(f"  WARNING: neither {k3!r} nor {k1!r} has rows.json -- models absent",
+                  file=sys.stderr)
     return rows
 
 
@@ -116,25 +120,39 @@ def main() -> int:
            r"\bottomrule", r"\end{tabular}"]
     (ROOT / "out/tables/neutral_class.tex").write_text("\n".join(c2))
 
-    # ---- C8: separated output-error vs cleanup-error rates ----
-    c8 = [r"\begin{tabular}{lrrrr}", r"\toprule",
-          r"& happy & error & output-err & cleanup-err \\",
-          r"Model & full-ok (\%) & full-ok (\%) & rate (\%) & rate (\%) \\", r"\midrule"]
+    # ---- C8: what the gap is made of, plus silent misuse on its proper denominator ----
+    # Folds in the output-only-vs-OrderBench comparison so the paper carries one 13-model
+    # neutral breakdown instead of two. The gap is a difference of two full-correct rates, so
+    # a zero gap can mean success on both paths or failure on both; showing the rates makes
+    # which one visible. And the published silent-misuse rate divides by all 98 scenarios,
+    # which flatters a model that simply gets fewer outputs right, since it had fewer chances
+    # to be output-correct-yet-leaking -- hence the conditional rate over the output-correct
+    # error-path scenarios, the population that could actually leak silently.
+    c8 = [r"\begin{tabular}{lrrrrrr}", r"\toprule",
+          r"& Happy & Error & Gap & Out-only & \multicolumn{2}{c}{Silent misuse (\%)} \\",
+          r"\cmidrule(lr){2-3}\cmidrule(lr){4-4}\cmidrule(lr){5-5}\cmidrule(lr){6-7}",
+          r"Model & f.c.\ (\%) & f.c.\ (\%) & (pp) & acc.\ (\%) & all & cond. \\",
+          r"\midrule"]
     for m in models:
         rs = by_model[m]
         happy = [r for r in rs if r["type"] == "happy"]
         err = [r for r in rs if r["type"] == "error"]
         h = sum(1 for r in happy if r["full_correct"]) / len(happy) if happy else 0
         e = sum(1 for r in err if r["full_correct"]) / len(err) if err else 0
-        out_err = sum(1 for r in rs if not r["output_ok"]) / len(rs)
-        clean_err = sum(1 for r in rs if r["violations"]) / len(rs)
-        c8.append(f"{LABEL[m]} & {pct(h)} & {pct(e)} & {pct(out_err)} & {pct(clean_err)} \\\\")
-    c8 += [r"\bottomrule", r"\end{tabular}"]
-    (ROOT / "out/tables/outvscleanup.tex").write_text("\n".join(c8))
+        out_ok = sum(1 for r in rs if r["output_ok"]) / len(rs)
+        silent_all = sum(1 for r in rs if r["output_ok"] and r["violations"]) / len(rs)
+        err_ok = [r for r in err if r["output_ok"]]
+        silent_cond = (sum(1 for r in err_ok if r["violations"]) / len(err_ok)) if err_ok else 0
+        c8.append(f"{LABEL[m]} & {pct(h)} & {pct(e)} & {100*(h-e):.0f} & {pct(out_ok)} & "
+                  f"{pct(silent_all)} & {pct(silent_cond)} \\\\")
+    c8 += [r"\midrule",
+           rf"\textbf{{Total silent}} & -- & -- & -- & -- & \textbf{{{tot_silent}}} & -- \\",
+           r"\bottomrule", r"\end{tabular}"]
+    (ROOT / "out/tables/pathdecomp.tex").write_text("\n".join(c8))
 
     print(f"models: {len(models)}  |  total silent leaks (output-only accepts): {tot_silent}")
     print("per-class totals:", dict(totals))
-    print("wrote out/tables/{outputonly,neutral_class,outvscleanup}.tex")
+    print("wrote out/tables/{outputonly,neutral_class,pathdecomp}.tex")
     return 0
 
 

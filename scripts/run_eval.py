@@ -20,7 +20,7 @@ sys.path.insert(0, str(ROOT))
 
 from orderbench.harness import load_suite  # noqa: E402
 from orderbench.report import results_bundle, write_bundle  # noqa: E402
-from orderbench.runner import run_model, write_rows  # noqa: E402
+from orderbench.runner import run_config, run_model, write_rows  # noqa: E402
 
 
 def main() -> int:
@@ -36,26 +36,47 @@ def main() -> int:
                     help="API-DOC cue: full (doc states cleanup obligation), neutral (doc "
                          "only lists methods), or auto (tracks --prompt-mode). Crossing the two "
                          "cues gives the 2x2 ablation: neutral / api-only / task-only / instructed")
+    ap.add_argument("--mock-cm", choices=["off", "on"], default="off",
+                    help="whether the instrumented resources expose the context-manager "
+                         "protocol. off (default) = the published method-only mocks, where "
+                         "`with` raises TypeError; on = `with` is a legitimate way to "
+                         "discharge cleanup, and the API doc lists it as a capability. "
+                         "An interface ablation, orthogonal to the two prompt cues")
+    ap.add_argument("--reasoning-effort", choices=["low", "medium", "high", "default"],
+                    default="low",
+                    help="reasoning_effort for OpenAI gpt-5/o-series models; 'default' sends "
+                         "no value at all. Applied verbatim -- there is no silent fallback")
+    ap.add_argument("--claude-parity", action="store_true",
+                    help="strip the Claude Code CLI's own agent system prompt via "
+                         "--system-prompt, so the claude-code arm matches the bare-API arms "
+                         "(~33.8k -> ~4.2k tokens of system context)")
     args = ap.parse_args()
     api_doc_mode = None if args.api_doc_mode == "auto" else args.api_doc_mode
+    mock_cm = args.mock_cm == "on"
+    reasoning_effort = None if args.reasoning_effort == "default" else args.reasoning_effort
+    cfg = run_config(args.prompt_mode, api_doc_mode, mock_cm, reasoning_effort,
+                     args.claude_parity)
 
     tasks = load_suite(args.tasks)
     print(f"loaded {len(tasks)} tasks")
     out_root = ROOT / "results" / args.tag
     sols_dir = out_root / "solutions"
 
-    print(f"prompt mode: {args.prompt_mode}  api-doc mode: {args.api_doc_mode}")
+    print(f"run config: {cfg}")
     rows_by_model = {}
     all_rows = []
     for model in args.models:
         rows = run_model(model, tasks, sols_dir, repeats=args.repeats,
-                         prompt_mode=args.prompt_mode, api_doc_mode=api_doc_mode)
+                         prompt_mode=args.prompt_mode, api_doc_mode=api_doc_mode,
+                         mock_cm=mock_cm, reasoning_effort=reasoning_effort,
+                         claude_parity=args.claude_parity)
         rows_by_model[model] = rows
         all_rows.extend(rows)
         print(f"  {model}: {len(rows)} scenario rows")
 
     write_rows(all_rows, out_root / "rows.json")
     bundle = results_bundle(rows_by_model)
+    bundle["config"] = cfg  # so a tag can never silently disagree with its condition
     write_bundle(bundle, out_root / "results.json")
 
     print("\n=== summary ===")

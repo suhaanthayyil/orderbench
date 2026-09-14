@@ -73,5 +73,5 @@ A task is **valid** iff its `reference.py` is `full_correct` on every scenario A
    logic. The buggy version must pass the happy path and fail only on cleanup.
 2. Keep business logic trivial and outputs literal so `expected` is unambiguous.
 3. Every task must have at least one `happy` and one `error` scenario.
-4. Mocks mimic real semantics (DB-API, context managers, `threading.RLock`) so violations
+4. Mocks mimic real call semantics (DB-API transactions, `threading.RLock` balance) so violations
    are meaningful, not artifacts of a contrived API.

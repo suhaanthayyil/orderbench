@@ -82,6 +82,57 @@ def test_validity_bridge_passes():
     assert mod.main() == 0  # BRIDGE PASS across all primitives
 
 
+def test_context_manager_mode_is_off_by_default_and_sound_when_on():
+    """The context-manager ablation must not disturb the published, method-only results.
+
+    Off (the default): `with resource:` raises TypeError exactly as it does on an object with
+    no `__exit__`, which is what every committed result was graded against. On: `with` is a
+    real cleanup path -- it releases on the exception path and records no violation -- and the
+    construct-validity gate still holds, so the ablation arm is graded by the same instrument.
+    """
+    from orderbench.invariants import RunContext, InjectedError, cm_support, set_cm_support
+    from orderbench.mocks import db, fs, lock
+    from orderbench.harness import validate_task
+
+    assert cm_support() is False, "context-manager support must default to off"
+
+    def run(build, body, op):
+        ctx = RunContext()
+        mgr = build(ctx)
+        mgr.arm_injection(op, 1, InjectedError("boom"))
+        raised = None
+        try:
+            body(mgr)
+        except Exception as exc:  # noqa: BLE001
+            raised = type(exc).__name__
+        ctx.teardown()
+        return raised, ctx.classes()
+
+    cases = [
+        (lambda c: db.build(c),
+         lambda p: exec("with p.connect() as c:\n c.begin(); c.execute('x'); c.commit()", {"p": p}),
+         "execute"),
+        (lambda c: fs.build(c, {"a": "hi"}),
+         lambda f: exec("with f.open('a') as h:\n h.write(h.read().upper())", {"f": f}), "read"),
+        (lambda c: lock.build(c, 0),
+         lambda e: exec("with e.lock:\n e.resource.modify(1)", {"e": e}), "modify"),
+    ]
+    try:
+        for build, body, op in cases:
+            raised, classes = run(build, body, op)
+            assert raised == "TypeError", f"cm off: expected TypeError, got {raised}"
+
+        set_cm_support(True)
+        for build, body, op in cases:
+            raised, classes = run(build, body, op)
+            assert raised == "InjectedError", f"cm on: fault must propagate, got {raised}"
+            assert classes == [], f"cm on: `with` must release cleanly, got {classes}"
+        for task in _suite():
+            assert validate_task(task).ok, f"{task.id}: gate fails under mock_cm=on"
+    finally:
+        set_cm_support(False)
+
+
 if __name__ == "__main__":
     # Fallback runner so the suite works even without pytest installed.
     fns = {name: fn for name, fn in sorted(globals().items())

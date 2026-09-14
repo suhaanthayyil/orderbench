@@ -62,11 +62,16 @@ For each scenario the harness records `output_ok` and the mock's `violations`, t
 ```bash
 pip install -r requirements.txt
 
-make validate     # construct-validity gate: every reference is clean, every buggy leaks
-make demo         # run reference / buggy / null baselines  ->  results/demo/
-make figures      # regenerate result figures + LaTeX tables -> out/
-make test         # pytest smoke suite
+make validate           # construct-validity gate: every reference is clean, every buggy leaks
+make demo               # run reference / buggy / null baselines  ->  results/demo/
+make reproduce-tables   # regenerate every paper table from committed results (no API keys)
+make regrade-check      # re-grade every cached solution; must match the committed rows
+make test               # pytest smoke suite
 ```
+
+Every generated solution is cached, so grading replays offline with no model calls. The cache
+ships as `results/solutions.tar.gz`; unpack it once with `make unpack-solutions` before
+`make regrade-check`.
 
 The three built-in adapters need **no API key** and make the benchmark self-demonstrating:
 
@@ -97,7 +102,8 @@ Adapters are pluggable:
 | `reference` / `buggy` / `null` | free | calibration baselines, no model |
 | `claude-code:<alias>` | free* | drives the local `claude` CLI headlessly (`opus`/`sonnet`/`haiku`); tools disabled, isolated cwd |
 | `anthropic:<model>` | API | needs `ANTHROPIC_API_KEY`; family API doc is prompt-cached |
-| `ollama:<model>` | free | local open models via Ollama (offline, no key) |
+| `ollama:<model>` | free | local open models via Ollama HTTP API (offline, no key) |
+| `ollama-cli:<model>` | free | same, via `ollama run` (kept for provenance; can hang on some models) |
 | `openai:<model>` | API | needs `OPENAI_API_KEY` |
 | `command:<argv>` | varies | shell out to any CLI that reads the prompt on stdin and prints a solution |
 
@@ -135,9 +141,15 @@ task and is the CI gate.
 ## Threats to validity (read before citing)
 
 - **"No API-specific contamination", not "no knowledge".** The mocks deliberately mimic
-  real semantics (DB-API, context managers, `RLock`), so models transfer learned idioms —
-  that is the intended signal. We claim freedom from *API-specific* memorization, not that
-  the model has zero relevant prior.
+  real call semantics (DB-API transactions, `RLock` acquire/release balance), so models
+  transfer learned idioms — that is the intended signal. We claim freedom from *API-specific*
+  memorization, not that the model has zero relevant prior.
+- **The mocks are method-only by default.** They expose `close()` / `release()` and do **not**
+  implement `__enter__`/`__exit__`, so `with resource:` raises `TypeError` (and, for db/fs,
+  also records an `unclosed` violation, since the resource was already handed out). The
+  candidate is expected to write `try/finally`. Pass `--mock-cm on` to enable the
+  context-manager protocol; that is the interface ablation, and `scripts/idiom_stats.py`
+  reports how often models actually reach for `with` under each condition.
 - **Construct validity.** Violations are meaningful only if the mocks are realistic. A
   validity bridge replicates representative misuse classes against the real Python stdlib
   (`sqlite3`, `threading.Lock`) — run `make bridge`.
