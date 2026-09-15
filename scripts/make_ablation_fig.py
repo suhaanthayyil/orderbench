@@ -2,7 +2,8 @@
 
 Grouped bars per model: instructed-prompt cleanup gap vs neutral-prompt gap, each the mean over
 k=3 generations; the neutral bar carries its generation SD as an error bar. Writes both
-out/figures/ and the local paper/figures/ (gitignored) so the paper picks it up.
+out/figures/. The camera-ready carries no figure (Table II holds the same numbers with
+its CIs), so nothing is copied into paper/.
 """
 from __future__ import annotations
 
@@ -79,7 +80,7 @@ def main() -> int:
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     fig.tight_layout()
-    for out in [ROOT / "out/figures/ablation_gap.png", ROOT / "paper/figures/ablation_gap.png"]:
+    for out in [ROOT / "out/figures/ablation_gap.png"]:
         out.parent.mkdir(parents=True, exist_ok=True)
         fig.savefig(out, dpi=400, bbox_inches="tight")
     print(f"wrote ablation_gap.png (k=3, {len(models)} models, neutral error bars)")

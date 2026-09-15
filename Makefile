@@ -1,6 +1,6 @@
 .PHONY: help install validate demo figures panel panel-neutral ablation test clean all bridge \
         smoke reproduce-tables ext-tables k3-table headline repair-table cue2x2 idioms \
-        static-baselines regrade-check paper-assets pack-solutions unpack-solutions
+        static-baselines regrade-check paper-assets pack-solutions unpack-solutions panel-table
 
 help:
 	@echo "OrderBench targets:"
@@ -74,6 +74,9 @@ cue2x2:
 idioms:
 	python3 scripts/idiom_stats.py
 
+panel-table:
+	python3 scripts/make_panel_table.py
+
 static-baselines:
 	python3 scripts/static_baselines.py
 
@@ -96,14 +99,15 @@ headline:
 repair-table:
 	python3 scripts/run_repair.py --models claude-code:haiku claude-code:sonnet
 
-reproduce-tables: ablation headline ext-tables k3-table cue2x2 idioms static-baselines bridge
+reproduce-tables: ablation headline ext-tables k3-table cue2x2 idioms panel-table static-baselines bridge
 	@echo "regenerated all paper tables/figures into out/"
 
 # main.tex \input{}s from paper/tables/ and \includegraphics from paper/figures/, while the
 # generators write to out/. This is the one explicit step that promotes a regenerated asset
 # into the manuscript, so a table never changes in the paper without someone asking for it.
+# Only the two tables main.tex actually \input{}s; the rest stay in out/ so the manuscript
+# directory holds exactly what is needed to build it.
 paper-assets: reproduce-tables
-	mkdir -p paper/tables paper/figures
-	cp out/tables/*.tex paper/tables/
-	cp out/figures/*.png paper/figures/ 2>/dev/null || true
-	@echo "synced out/ -> paper/"
+	mkdir -p paper/tables
+	cp out/tables/ablation.tex out/tables/panel.tex paper/tables/
+	@echo "synced out/tables -> paper/tables"
