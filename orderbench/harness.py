@@ -28,6 +28,8 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import signal
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, List
@@ -136,7 +138,48 @@ class ScenarioResult:
         return self.output_ok and not self.violations
 
 
-def run_scenario(task: Task, entrypoint: Callable, scenario: Scenario) -> ScenarioResult:
+#: Wall-clock budget for one candidate execution. Every task in the suite is a handful of mock
+#: calls, so a scenario that runs longer is not slow -- it is not going to finish. Models do
+#: write non-terminating solutions: "read until it returns empty" is a reasonable real idiom,
+#: but the mock's ``read()`` always returns the same contents, so the loop never exits. Without
+#: a bound, one such generation hangs an entire run.
+EXEC_TIMEOUT_SECONDS = 5.0
+
+
+class CandidateTimeout(Exception):
+    """A candidate did not finish inside :data:`EXEC_TIMEOUT_SECONDS`."""
+
+
+@contextmanager
+def _time_limit(seconds: float):
+    """Interrupt the candidate after ``seconds``.
+
+    SIGALRM interrupts a pure-Python loop because the interpreter checks for signals between
+    bytecodes. It is main-thread/Unix only; where it is unavailable the call runs unbounded,
+    which is the old behaviour rather than a new failure mode.
+    """
+    if seconds <= 0 or not hasattr(signal, "SIGALRM"):
+        yield
+        return
+
+    def _fire(signum, frame):
+        raise CandidateTimeout(f"candidate exceeded {seconds:g}s")
+
+    try:
+        previous = signal.signal(signal.SIGALRM, _fire)
+    except ValueError:  # not the main thread
+        yield
+        return
+    signal.setitimer(signal.ITIMER_REAL, seconds)
+    try:
+        yield
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, previous)
+
+
+def run_scenario(task: Task, entrypoint: Callable, scenario: Scenario,
+                 timeout: float = EXEC_TIMEOUT_SECONDS) -> ScenarioResult:
     """Execute one scenario against a candidate entrypoint and grade it."""
     ctx = RunContext()
     family = FAMILIES[task.family]
@@ -151,8 +194,13 @@ def run_scenario(task: Task, entrypoint: Callable, scenario: Scenario) -> Scenar
 
     raised: str | None = None
     returned: Any = None
+    timed_out = False
     try:
-        returned = entrypoint(manager, *scenario.args)
+        with _time_limit(timeout):
+            returned = entrypoint(manager, *scenario.args)
+    except CandidateTimeout:
+        raised = "timeout"
+        timed_out = True
     except InjectedError as exc:
         raised = "InjectedError"
         _ = exc
@@ -161,7 +209,11 @@ def run_scenario(task: Task, entrypoint: Callable, scenario: Scenario) -> Scenar
 
     # End-of-scope leak/cleanup checks.
     ctx.teardown()
-    violations = ctx.classes()
+    # A candidate that never returns is graded wrong on output, but its resources are not
+    # counted as leaked: it was interrupted mid-flight rather than reaching a scope exit with
+    # the resource still open, and charging it a cleanup violation would conflate
+    # non-termination with a cleanup bug. This mirrors how an unimportable candidate is graded.
+    violations = [] if timed_out else ctx.classes()
 
     # Output correctness.
     if scenario.type == "happy":

@@ -6,6 +6,7 @@ Run with: pytest -q
 from __future__ import annotations
 
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -131,6 +132,47 @@ def test_context_manager_mode_is_off_by_default_and_sound_when_on():
             assert validate_task(task).ok, f"{task.id}: gate fails under mock_cm=on"
     finally:
         set_cm_support(False)
+
+
+def test_non_terminating_candidate_is_bounded_and_not_counted_as_a_leak():
+    """A candidate that never returns must not hang the run, nor be scored as leaking.
+
+    Models write this shape: read in a loop until the call returns empty. It is a reasonable
+    real idiom, but the mock's `read()` always returns the same contents, so the loop never
+    exits. Before the execution bound, one such generation stalled an entire evaluation at
+    100% CPU. It is graded output-wrong (the function does not return) with no violation --
+    charging it a cleanup violation would conflate non-termination with a cleanup bug.
+    """
+    import time
+    from orderbench.harness import EXEC_TIMEOUT_SECONDS, run_task_safe
+
+    spinner = (
+        "def read_file(fs, path):\n"
+        "    handle = fs.open(path)\n"
+        "    try:\n"
+        "        out = []\n"
+        "        while True:\n"
+        "            chunk = handle.read()\n"
+        "            if chunk == '':\n"
+        "                break\n"
+        "            out.append(chunk)\n"
+        "        return ''.join(out)\n"
+        "    finally:\n"
+        "        handle.close()\n"
+    )
+    task = next(t for t in _suite() if t.id == "fs_010_read_file")
+    with tempfile.TemporaryDirectory() as td:
+        p = Path(td) / "sol.py"
+        p.write_text(spinner)
+        start = time.time()
+        rows = run_task_safe(task, p)
+        elapsed = time.time() - start
+
+    assert elapsed < EXEC_TIMEOUT_SECONDS * len(rows) + 5, f"grading took {elapsed:.1f}s"
+    happy = [r for r in rows if r.type == "happy"]
+    assert happy and all(r.raised == "timeout" for r in happy), [r.raised for r in happy]
+    assert all(not r.output_ok for r in happy)
+    assert all(r.violations == [] for r in happy), "a timeout must not be scored as a leak"
 
 
 if __name__ == "__main__":

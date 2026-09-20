@@ -39,8 +39,8 @@ LABEL = {"claude-code:opus": "Claude Opus", "claude-code:sonnet": "Claude Sonnet
          "openai:gpt-4.1": "GPT-4.1", "openai:gpt-4.1-mini": "GPT-4.1-mini",
          "openai:gpt-4.1-nano": "GPT-4.1-nano"}
 ARMS = {
-    "cm": {"arm": ["cm_claude_neutral", "cm_gemma_neutral"],
-           "base": ["k3_claude_neutral", "k3_gemma_neutral"]},
+    "cm": {"arm": ["cm_claude_neutral", "cm_gpt_neutral"],
+           "base": ["k3_claude_neutral", "k3_gpt_neutral", "k3_gpt2_neutral"]},
     "parity": {"arm": ["parity_claude_neutral"],
                "base": ["k3_claude_neutral"]},
     "medium": {"arm": ["medium_gpt5_neutral"],
