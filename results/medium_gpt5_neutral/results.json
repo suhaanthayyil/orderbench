@@ -1,0 +1,129 @@
+{
+  "models": {
+    "openai:gpt-5.4-mini": {
+      "model": "openai:gpt-5.4-mini",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 0.9933,
+      "error_correct": 0.8819,
+      "cleanup_gap": 0.1114,
+      "silent_misuse_rate": 0.0578,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 8,
+        "unclosed": 9
+      },
+      "ci": {
+        "happy_correct": [
+          0.9792,
+          1.0
+        ],
+        "error_correct": [
+          0.8125,
+          0.9444
+        ],
+        "cleanup_gap": [
+          0.0417,
+          0.1875
+        ]
+      }
+    },
+    "openai:gpt-5.4-nano": {
+      "model": "openai:gpt-5.4-nano",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 0.98,
+      "error_correct": 0.9097,
+      "cleanup_gap": 0.0703,
+      "silent_misuse_rate": 0.0442,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 1,
+        "unclosed": 12
+      },
+      "ci": {
+        "happy_correct": [
+          0.9514,
+          1.0
+        ],
+        "error_correct": [
+          0.8403,
+          0.9653
+        ],
+        "cleanup_gap": [
+          0.0069,
+          0.1389
+        ]
+      }
+    },
+    "openai:gpt-5": {
+      "model": "openai:gpt-5",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 0.98,
+      "error_correct": 0.9861,
+      "cleanup_gap": -0.0061,
+      "silent_misuse_rate": 0.0068,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 1,
+        "unclosed": 1
+      },
+      "ci": {
+        "happy_correct": [
+          0.9375,
+          1.0
+        ],
+        "error_correct": [
+          0.9653,
+          1.0
+        ],
+        "cleanup_gap": [
+          -0.0625,
+          0.0278
+        ]
+      }
+    },
+    "openai:gpt-5.5": {
+      "model": "openai:gpt-5.5",
+      "n_tasks": 48,
+      "n_scenarios": 294,
+      "happy_correct": 1.0,
+      "error_correct": 1.0,
+      "cleanup_gap": 0.0,
+      "silent_misuse_rate": 0.0,
+      "per_class": {
+        "order": 0,
+        "guard": 0,
+        "double": 0,
+        "unclosed": 0
+      },
+      "ci": {
+        "happy_correct": [
+          1.0,
+          1.0
+        ],
+        "error_correct": [
+          1.0,
+          1.0
+        ],
+        "cleanup_gap": [
+          0.0,
+          0.0
+        ]
+      }
+    }
+  },
+  "config": {
+    "prompt_mode": "neutral",
+    "api_doc_mode": "neutral",
+    "mock_cm": false,
+    "reasoning_effort": "medium",
+    "claude_parity": false,
+    "max_tokens": 8192,
+    "request_timeout": 300.0
+  }
+}
