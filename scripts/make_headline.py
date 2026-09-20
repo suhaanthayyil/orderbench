@@ -99,7 +99,10 @@ def main() -> int:
         r0 = [r for r in neut if r["model"] == m and r.get("rep", 0) == 0]
         n0 = len(r0)
         silent = sum(1 for r in r0 if r["output_ok"] and r["violations"])
-        leaks = sum(len(r["violations"]) for r in r0)
+        # The column is labelled "leaks", so count the leak class only. Counting every
+        # violation made it total 121 and contradicted the paper's own "117 of 121 are
+        # leaks": the four GPT-5-family double-closes are violations, not leaks.
+        leaks = sum(1 for r in r0 for v in r["violations"] if v == "unclosed")
         lines.append(
             f"{LABEL[m]} & {imean:.0f} & "
             f"\\textbf{{{nmean:.0f}}}$\\pm${nsd:.0f} [{100*ci[0]:.0f},\\,{100*ci[1]:.0f}] & "

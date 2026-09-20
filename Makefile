@@ -84,9 +84,11 @@ regrade-check:
 	python3 scripts/regrade_check.py
 
 # The cached generations ship compressed so a plain `git clone` is enough to re-grade every
-# published number offline. ~9.9k small .py files, 3 MB packed.
+# published number offline. Excludes __pycache__, which the harness regenerates and which
+# otherwise outnumbered the solutions it was shipped alongside.
 pack-solutions:
-	tar -czf results/solutions.tar.gz $$(find results -type d -name solutions | sort)
+	tar --exclude='__pycache__' --exclude='*.pyc' \
+	    -czf results/solutions.tar.gz $$(find results -type d -name solutions | sort)
 	@ls -lh results/solutions.tar.gz
 
 unpack-solutions:
