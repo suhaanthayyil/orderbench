@@ -9,6 +9,11 @@ Two arms are reported:
 * ``parity`` -- the harness-parity arm. Same method-only mocks and same neutral prompt, but
                 the Claude Code CLI's own agent system prompt is replaced by a minimal one,
                 so the Claude arm carries system context comparable to the bare-API arms.
+* ``medium`` -- the reasoning-effort arm. Same neutral prompt and same method-only mocks, but
+                the GPT-5 family runs at ``reasoning_effort=medium`` instead of ``low``, with a
+                budget raised so reasoning tokens cannot truncate the answer. Tests whether the
+                cheap setting was suppressing deliberation that would have produced a
+                ``finally``.
 
 For each model it prints the baseline gap, the arm's gap, the delta, and the idiom mix, so the
 claim in the paper is a measured contrast rather than an assertion.
@@ -27,12 +32,19 @@ sys.path.insert(0, str(ROOT))
 
 BASE = {"reference", "buggy", "null"}
 LABEL = {"claude-code:opus": "Claude Opus", "claude-code:sonnet": "Claude Sonnet",
-         "claude-code:haiku": "Claude Haiku", "ollama:gemma4:12b": "gemma 12B"}
+         "claude-code:haiku": "Claude Haiku", "ollama:gemma4:12b": "gemma 12B",
+         "openai:gpt-5.5": "GPT-5.5", "openai:gpt-5.4-mini": "GPT-5.4-mini",
+         "openai:gpt-5.4-nano": "GPT-5.4-nano", "openai:gpt-5": "GPT-5",
+         "openai:gpt-5-mini": "GPT-5-mini", "openai:gpt-4o-mini": "GPT-4o-mini",
+         "openai:gpt-4.1": "GPT-4.1", "openai:gpt-4.1-mini": "GPT-4.1-mini",
+         "openai:gpt-4.1-nano": "GPT-4.1-nano"}
 ARMS = {
     "cm": {"arm": ["cm_claude_neutral", "cm_gemma_neutral"],
            "base": ["k3_claude_neutral", "k3_gemma_neutral"]},
     "parity": {"arm": ["parity_claude_neutral"],
                "base": ["k3_claude_neutral"]},
+    "medium": {"arm": ["medium_gpt5_neutral"],
+               "base": ["k3_gpt_neutral", "k3_gpt2_neutral"]},
 }
 
 

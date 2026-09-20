@@ -46,6 +46,12 @@ def main() -> int:
                     default="low",
                     help="reasoning_effort for OpenAI gpt-5/o-series models; 'default' sends "
                          "no value at all. Applied verbatim -- there is no silent fallback")
+    ap.add_argument("--max-tokens", type=int, default=2048,
+                    help="max_completion_tokens for the OpenAI adapter. The published panel "
+                         "used 2048, which never bound at reasoning_effort=low; raise it for "
+                         "higher effort so reasoning tokens cannot truncate the answer")
+    ap.add_argument("--request-timeout", type=float, default=90.0,
+                    help="OpenAI client timeout in seconds (published panel: 90)")
     ap.add_argument("--claude-parity", action="store_true",
                     help="strip the Claude Code CLI's own agent system prompt via "
                          "--system-prompt, so the claude-code arm matches the bare-API arms "
@@ -55,7 +61,7 @@ def main() -> int:
     mock_cm = args.mock_cm == "on"
     reasoning_effort = None if args.reasoning_effort == "default" else args.reasoning_effort
     cfg = run_config(args.prompt_mode, api_doc_mode, mock_cm, reasoning_effort,
-                     args.claude_parity)
+                     args.claude_parity, args.max_tokens, args.request_timeout)
 
     tasks = load_suite(args.tasks)
     print(f"loaded {len(tasks)} tasks")
@@ -69,7 +75,8 @@ def main() -> int:
         rows = run_model(model, tasks, sols_dir, repeats=args.repeats,
                          prompt_mode=args.prompt_mode, api_doc_mode=api_doc_mode,
                          mock_cm=mock_cm, reasoning_effort=reasoning_effort,
-                         claude_parity=args.claude_parity)
+                         claude_parity=args.claude_parity, max_tokens=args.max_tokens,
+                         request_timeout=args.request_timeout)
         rows_by_model[model] = rows
         all_rows.extend(rows)
         print(f"  {model}: {len(rows)} scenario rows")

@@ -110,6 +110,14 @@ _MOCK_CM = False
 # all (provider default). Recorded in the run config so a row's effort is never ambiguous.
 _REASONING_EFFORT: str | None = "low"
 
+# Generation budget for the OpenAI adapter. The published panel used 2048 tokens and a 90 s
+# client timeout, which never bound at `reasoning_effort=low` (no empty or truncated solution
+# in 720 GPT-5 generations). Higher effort spends far more of the budget on reasoning tokens
+# before any answer is emitted, so the budget is a run parameter: a truncated answer would
+# make higher effort look worse for a reason that has nothing to do with cleanup discipline.
+_MAX_TOKENS = 2048
+_REQUEST_TIMEOUT = 90.0
+
 # Extra argv for the claude-code adapter, used by the harness-parity arm to replace the
 # Claude Code CLI's own system prompt with a minimal one (see `claude_parity_argv`).
 _CLAUDE_EXTRA_ARGV: list[str] = []
@@ -363,9 +371,9 @@ def _openai_code(model: str) -> CodeFn:
 
         # Bound every call: 90s timeout, no long retry loop -> a runaway reasoning
         # generation fails fast and the task scores wrong, instead of hanging the run.
-        client = OpenAI(timeout=90.0, max_retries=1)
+        client = OpenAI(timeout=_REQUEST_TIMEOUT, max_retries=1)
         msgs = [{"role": "user", "content": build_prompt(task)}]
-        base = dict(model=model, messages=msgs, max_completion_tokens=2048)
+        base = dict(model=model, messages=msgs, max_completion_tokens=_MAX_TOKENS)
         # GPT-5 / o-series are reasoning models. The effort is whatever the run config
         # says and nothing else: an earlier version fell back to the provider default
         # when the explicit call raised, which made a row's effort unrecoverable after
@@ -420,7 +428,8 @@ def resolve_adapter(model: str) -> CodeFn:
 # --------------------------------------------------------------------------- #
 def run_config(prompt_mode: str = "instructed", api_doc_mode: str | None = None,
                mock_cm: bool = False, reasoning_effort: str | None = "low",
-               claude_parity: bool = False) -> dict:
+               claude_parity: bool = False, max_tokens: int = 2048,
+               request_timeout: float = 90.0) -> dict:
     """The full generation configuration for a run, as recorded in the results bundle.
 
     Solutions are cached by ``(tag, model, task, rep)`` alone, so nothing in the path
@@ -434,13 +443,16 @@ def run_config(prompt_mode: str = "instructed", api_doc_mode: str | None = None,
         "mock_cm": bool(mock_cm),
         "reasoning_effort": reasoning_effort,
         "claude_parity": bool(claude_parity),
+        "max_tokens": int(max_tokens),
+        "request_timeout": float(request_timeout),
     }
 
 
 def run_model(model: str, tasks: list[Task], out_dir: str | Path, repeats: int = 1,
               prompt_mode: str = "instructed", api_doc_mode: str | None = None,
               mock_cm: bool = False, reasoning_effort: str | None = "low",
-              claude_parity: bool = False) -> list[dict]:
+              claude_parity: bool = False, max_tokens: int = 2048,
+              request_timeout: float = 90.0) -> list[dict]:
     """Generate (or load) a solution per task, grade it, and return flat scenario rows.
 
     ``repeats`` re-samples generation for stochastic models (k in pass@1 / CI estimation);
@@ -455,12 +467,15 @@ def run_model(model: str, tasks: list[Task], out_dir: str | Path, repeats: int =
     Claude Code CLI's own system prompt so that arm matches the bare-API arms.
     """
     global _PROMPT_MODE, _API_DOC_MODE, _MOCK_CM, _REASONING_EFFORT, _CLAUDE_EXTRA_ARGV
+    global _MAX_TOKENS, _REQUEST_TIMEOUT
     _PROMPT_MODE = prompt_mode
     _API_DOC_MODE = api_doc_mode if api_doc_mode is not None else (
         "neutral" if prompt_mode == "neutral" else "full")
     _MOCK_CM = bool(mock_cm)
     _REASONING_EFFORT = reasoning_effort
     _CLAUDE_EXTRA_ARGV = claude_parity_argv() if claude_parity else []
+    _MAX_TOKENS = int(max_tokens)
+    _REQUEST_TIMEOUT = float(request_timeout)
     # The mocks are constructed per scenario inside the harness, so the protocol switch
     # has to be set on the invariants module, not passed down through run_task_safe.
     set_cm_support(_MOCK_CM)
